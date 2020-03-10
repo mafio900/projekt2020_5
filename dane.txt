@@ -1,4 +1,4 @@
-11,1,KlasaBsss
+11,1,KlasaB
 11,3,KlasaA
 11,5,KlasaA
 9,1,KlasaA
