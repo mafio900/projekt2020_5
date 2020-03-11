@@ -1,8 +1,9 @@
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
+const fs = require('fs');
 
-const {app, BrowserWindow, Menu} = electron;
+const {app, BrowserWindow, Menu, dialog} = electron;
 
 let mainWindow;
 
@@ -12,7 +13,10 @@ app.on('ready', function(){
     //Create new window
     mainWindow = new BrowserWindow({
         width: 1280,
-        height: 720
+        height: 720,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
     //Load html
     mainWindow.loadURL(url.format({
@@ -36,6 +40,12 @@ const mainMenuTemplate = [
     {
         label: 'File',
         submenu:[
+            {
+                label: 'Load data from file',
+                click(){
+                    loadFile();
+                }
+            },
             {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
@@ -64,3 +74,22 @@ if(process.env.NODE_ENV !== 'production'){
         ]
     });
 }
+
+function loadFile() {
+    //Show dialog window
+    dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile']
+    }).then(result => {
+        fs.readFile(result.filePaths[0], 'utf-8', (err, data) => {
+            if(err){
+                alert("An error ocurred reading the file :" + err.message);
+                return;
+            }
+            //Send data to renderer window
+            mainWindow.webContents.send('data', {msg: data});
+        });
+    }).catch(err => {
+        console.log(err);
+    });
+}
+
