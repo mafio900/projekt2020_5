@@ -13,12 +13,12 @@ ipcRenderer.on('data', (event, data) => {
 });
 
 
-var lines = [];
+const lines = [];
 
 
-var klasaA = new Array();
-var klasaB = new Array();
-var klasaC = new Array();
+const klasaA = new Array();
+const klasaB = new Array();
+const klasaC = new Array();
 
 function coordinate(x, y) {
     this.x = x;
@@ -30,28 +30,27 @@ let inputs = document.getElementById("inputs");
 function processData(allText) {
     inputs.style.display = "flex";
 
-    var allTextLines = allText.split(/\r\n|\n/);
+    const allTextLines = allText.split(/\r\n|\n/);
 
     for (var i = 0; i < allTextLines.length; i++) {
         allTextLines[i].split(',');
         lines.push(allTextLines[i].split(','));
     }
 
-
-    //przydziel do klasy
-    for (var i = 0; i < lines.length; i++) {
-        if((lines[i][2]) === "KlasaA")
-            klasaA.push(new coordinate( Number.parseInt(lines[i][0]),  Number.parseInt(lines[i][1]) ));
-        if((lines[i][2]) === "KlasaB")
-            klasaB.push(new coordinate( Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1]) ));
-        if((lines[i][2]) === "KlasaC")
-            klasaC.push(new coordinate( Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1]) ));
+        //przydziel do klasy
+        for (var i = 0; i < lines.length; i++) {
+            if ((lines[i][2]) === "KlasaA")
+                klasaA.push(new coordinate(Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1])));
+            if ((lines[i][2]) === "KlasaB")
+                klasaB.push(new coordinate(Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1])));
+            if ((lines[i][2]) === "KlasaC")
+                klasaC.push(new coordinate(Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1])));
         }
 
 
     //wykres
-    var ctx = document.getElementById('wykres').getContext('2d');
-    var myChart = new Chart(ctx, {
+    const ctx = document.getElementById('wykres').getContext('2d');
+    const myChart = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [{
@@ -64,7 +63,7 @@ function processData(allText) {
                 borderWidth: 1,
                 radius: 10,
                 pointStyle: "triangle"
-            },{
+            }, {
                 label: 'Klasa B',
                 data: klasaB,
                 backgroundColor:
@@ -74,7 +73,7 @@ function processData(allText) {
                 borderWidth: 1,
                 radius: 10,
                 pointStyle: "rect"
-            },{
+            }, {
                 label: 'Klasa C',
                 data: klasaC,
                 backgroundColor:
@@ -90,7 +89,7 @@ function processData(allText) {
             legend: {
                 display: true,
                 labels: {
-                    padding:10
+                    padding: 10
                 }
             },
             scales: {
