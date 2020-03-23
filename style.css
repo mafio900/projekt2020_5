@@ -1,0 +1,11 @@
+*, *::after, *::before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#inputs{
+    justify-content: center;
+    display: none;
+    margin-bottom: 30px;
+}

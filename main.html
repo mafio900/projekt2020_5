@@ -2,15 +2,19 @@
 <html lang="pl">
   <head>
     <title>Wykres projektowanie</title>
-    <link rel="stylesheet" type="text/css" title="Cool stylesheet" href="">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" title="Cool stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
   </head>
   <body>
-  <div id="root">
-  <div class="chart-container" style="height:45vh; width:45vw;margin:auto;">
-  <canvas id="wykres" width="400" height="400"></canvas>
+  <div id="inputs">
+    <input id="p" type="text" placeholder="p">
+    <input id="k" type="text" placeholder="k">
+    <button id="sub">Submit</button>
   </div>
+  <div id="root">
+    <div class="chart-container" style="height:45vh; width:45vw;margin:auto;">
+    <canvas id="wykres" width="400" height="400"></canvas>
+    </div>
   </div>
   <script src="wykres.js" type="text/javascript"></script>
   </body>

@@ -1,3 +1,11 @@
+let p = document.getElementById("p");
+let k = document.getElementById("k");
+const submit = document.getElementById("sub");
+submit.addEventListener("click", ()=>{
+    console.log(p.value);
+    console.log(k.value);
+});
+
 const electron = require('electron');
 const {ipcRenderer} = electron;
 ipcRenderer.on('data', (event, data) => {
@@ -17,8 +25,10 @@ function coordinate(x, y) {
     this.y = y;
 }
 
+let inputs = document.getElementById("inputs");
 
 function processData(allText) {
+    inputs.style.display = "flex";
 
     var allTextLines = allText.split(/\r\n|\n/);
 
@@ -37,13 +47,6 @@ function processData(allText) {
         if((lines[i][2]) === "KlasaC")
             klasaC.push(new coordinate( Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1]) ));
         }
-
-
-
-    // console.log(klasaA);
-    // console.log(klasaB);
-    // console.log(klasaC);
-
 
 
     //wykres
