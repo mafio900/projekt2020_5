@@ -8,11 +8,9 @@ ipcRenderer.on('data', (event, data) => {
 });
 
 
+const colorsBackground = ['rgba(0, 255, 0, 0.4)', 'rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)'];
+const colorsBorder =  ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'];
 
-
-let klasaA = [];
-let klasaB = [];
-let klasaC = [];
 
 function coordinate(x, y) {
     this.x = x;
@@ -97,8 +95,14 @@ function processData(allText) {
 
 
 //tworzenie tabeli z wybranymi kolumnami do wyświetlenia po wciśnięciu przycisku
+let licznik = 0;
+let myChart;
 const submit = document.getElementById("sub");
 submit.addEventListener("click", ()=>{
+    if(licznik){
+        myChart.destroy();
+    }
+    licznik++;
     const dataSet = [];
     const col1 = document.getElementsByName('col1');
     const col2 = document.getElementsByName('col2');
@@ -126,49 +130,29 @@ submit.addEventListener("click", ()=>{
         });
         dataSet.push(tmp2);
     }
-    console.log(dataSet);
+
+    let dataSets = [];
+    dataSet.forEach((d, i)=>{
+        dataSets.push({
+            label: names[i],
+            data: d,
+            backgroundColor: colorsBackground[i],
+            borderColor: colorsBorder[i],
+            borderWidth: 1,
+            radius: 10,
+            pointStyle: "triangle",
+            showLine: true
+        });
+    });
 
     //wykres
-    const chart = document.getElementById("wykres");
-    chart.textContent = "";
-    const ctx = chart.getContext('2d');
-    const myChart = new Chart(ctx, {
+    const canvas = document.getElementById("wykres");
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    myChart = new Chart(ctx, {
         type: 'scatter',
         data: {
-            datasets: [{
-                label: 'Klasa A',
-                data: dataSet[0],
-                backgroundColor:
-                    'rgba(0, 255, 0, 0.4)',
-                borderColor:
-                    'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                radius: 10,
-                pointStyle: "triangle",
-                showLine: true
-            }, {
-                label: 'Klasa B',
-                data: dataSet[1],
-                backgroundColor:
-                    'rgba(255, 99, 132, 0.4)',
-                borderColor:
-                    'rgba(255, 99, 132, 1)',
-                borderWidth: 1,
-                radius: 10,
-                pointStyle: "rect",
-                showLine: true
-            }, {
-                label: 'Klasa C',
-                data: dataSet[2],
-                backgroundColor:
-                    'rgba(54, 162, 235, 0.4)',
-                borderColor:
-                    'rgba(54, 162, 235, 1)',
-                borderWidth: 1,
-                radius: 10,
-                pointStyle: "circle",
-                showLine: true
-            }]
+            datasets: dataSets
         },
         options: {
             legend: {
