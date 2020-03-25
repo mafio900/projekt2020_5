@@ -9,3 +9,13 @@
     display: none;
     margin-bottom: 30px;
 }
+
+#selectCol1, #selectCol2{
+    justify-content: center;
+    display: none;
+    margin-bottom: 30px;
+}
+
+input[type="radio"]{
+    margin-left: 10px;
+}

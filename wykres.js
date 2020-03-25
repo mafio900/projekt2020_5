@@ -1,10 +1,5 @@
 let p = document.getElementById("p");
 let k = document.getElementById("k");
-const submit = document.getElementById("sub");
-submit.addEventListener("click", ()=>{
-    console.log(p.value);
-    console.log(k.value);
-});
 
 const electron = require('electron');
 const {ipcRenderer} = electron;
@@ -13,76 +8,166 @@ ipcRenderer.on('data', (event, data) => {
 });
 
 
-const lines = [];
 
 
-const klasaA = new Array();
-const klasaB = new Array();
-const klasaC = new Array();
+let klasaA = [];
+let klasaB = [];
+let klasaC = [];
 
 function coordinate(x, y) {
     this.x = x;
     this.y = y;
 }
-
-let inputs = document.getElementById("inputs");
-
+let sortedData;
+let names = [];
 function processData(allText) {
+    let inputs = document.getElementById("inputs");
+    let lines = [];
+    let data = [];
+    names = [];
+
+    sortedData = new Map();
     inputs.style.display = "flex";
 
-    const allTextLines = allText.split(/\r\n|\n/);
+    //sortowanie do poszczególnych grup każdej lini
+    let allTextLines = allText.split(/\r\n|\n/);
 
     for (var i = 0; i < allTextLines.length; i++) {
         allTextLines[i].split(',');
         lines.push(allTextLines[i].split(','));
     }
 
-        //przydziel do klasy
-        for (var i = 0; i < lines.length; i++) {
-            if ((lines[i][2]) === "KlasaA")
-                klasaA.push(new coordinate(Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1])));
-            if ((lines[i][2]) === "KlasaB")
-                klasaB.push(new coordinate(Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1])));
-            if ((lines[i][2]) === "KlasaC")
-                klasaC.push(new coordinate(Number.parseInt(lines[i][0]), Number.parseInt(lines[i][1])));
+    for(let line of lines){
+        let flag = false;
+        for(let name of names){
+            if(name === line[line.length-1])
+                flag = true;
         }
+        if(!flag){
+            names.push(line[line.length-1]);
+        }
+    }
+    names.forEach((name, i)=>{
+        data[i] = [];
+        for(let line of lines){
+            if(line[line.length-1]===name){
+                line.pop();
+                data[i].push(line);
+            }
+        }
+    });
 
+    data.forEach((d, i)=>{
+        sortedData.set(names[i], d);
+    });
+
+    //Dodawanie przycisków wybierania kolumn do wyświetlenia
+    let selectCol1 = document.getElementById("selectCol1");
+    selectCol1.textContent = '';
+    selectCol1.style.display = "flex";
+    for(let i = 0; i < lines[0].length; i++){
+        let node = document.createElement("input");
+        node.type = "radio";
+        node.name = "col1";
+        node.id = "col1"+i.toString();
+        selectCol1.appendChild(node);
+
+        let label = document.createElement("label");
+        label.htmlFor = i.toString();
+        label.textContent = "Kolumna: " + (i+1).toString()+" ";
+        selectCol1.appendChild(label);
+    }
+
+    let selectCol2 = document.getElementById("selectCol2");
+    selectCol2.style.display = "flex";
+    selectCol2.textContent = '';
+    for(let i = 0; i < lines[0].length; i++){
+        let node = document.createElement("input");
+        node.type = "radio";
+        node.name = "col2";
+        node.id = "col2"+i.toString();
+        selectCol2.appendChild(node);
+
+        let label = document.createElement("label");
+        label.htmlFor = i.toString();
+        label.textContent = "Kolumna: " + (i+1).toString()+" ";
+        selectCol2.appendChild(label);
+    }
+}
+
+
+//tworzenie tabeli z wybranymi kolumnami do wyświetlenia po wciśnięciu przycisku
+const submit = document.getElementById("sub");
+submit.addEventListener("click", ()=>{
+    const dataSet = [];
+    const col1 = document.getElementsByName('col1');
+    const col2 = document.getElementsByName('col2');
+
+    let c1;
+    let c2;
+    for (let i = 0; i < col1.length; i++) {
+        if (col1[i].checked) {
+            c1 = col1[i].id.slice(4,col1[i].length);
+            break;
+        }
+    }
+    for (let i = 0; i < col2.length; i++) {
+        if (col2[i].checked) {
+            c2 = col2[i].id.slice(4,col2[i].length);
+            break;
+        }
+    }
+
+    for(name of names){
+        let tmp = sortedData.get(name);
+        let tmp2 = [];
+        tmp.forEach((t)=>{
+            tmp2.push(new coordinate(Number.parseInt(t[c1]), Number.parseInt(t[c2])));
+        });
+        dataSet.push(tmp2);
+    }
+    console.log(dataSet);
 
     //wykres
-    const ctx = document.getElementById('wykres').getContext('2d');
+    const chart = document.getElementById("wykres");
+    chart.textContent = "";
+    const ctx = chart.getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [{
                 label: 'Klasa A',
-                data: klasaA,
+                data: dataSet[0],
                 backgroundColor:
-                    'rgba(0, 255, 0, 0.9)',
+                    'rgba(0, 255, 0, 0.4)',
                 borderColor:
                     'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
                 radius: 10,
-                pointStyle: "triangle"
+                pointStyle: "triangle",
+                showLine: true
             }, {
                 label: 'Klasa B',
-                data: klasaB,
+                data: dataSet[1],
                 backgroundColor:
-                    'rgba(255, 99, 132, 0.9)',
+                    'rgba(255, 99, 132, 0.4)',
                 borderColor:
                     'rgba(255, 99, 132, 1)',
                 borderWidth: 1,
                 radius: 10,
-                pointStyle: "rect"
+                pointStyle: "rect",
+                showLine: true
             }, {
                 label: 'Klasa C',
-                data: klasaC,
+                data: dataSet[2],
                 backgroundColor:
-                    'rgba(54, 162, 235, 0.9)',
+                    'rgba(54, 162, 235, 0.4)',
                 borderColor:
                     'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
                 radius: 10,
-                pointStyle: "circle"
+                pointStyle: "circle",
+                showLine: true
             }]
         },
         options: {
@@ -100,4 +185,4 @@ function processData(allText) {
             }
         }
     });
-}
+});
