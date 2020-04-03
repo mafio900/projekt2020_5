@@ -140,7 +140,8 @@ submit.addEventListener("click", ()=>{
             borderColor: colorsBorder[i],
             borderWidth: 1,
             radius: 10,
-            pointStyle: "circle"
+            pointStyle: "triangle",
+            showLine: true
         });
     });
 
@@ -169,23 +170,3 @@ submit.addEventListener("click", ()=>{
         }
     });
 });
-
-function lp(p1, p2) {
-    var dx = (p1.x - p2.x);
-    var dy = p1.y - p2.y;
-    return Math.abs(dx) + Math.abs(dy);
-}
-
-function find_neighbors(point, points) {
-    let dists = [];
-    for (let i = 0; i < points.length; i++) {
-        let dist = lp(point, points[i]);
-        dists.push([dist, points[i]]);
-    }
-    dists.sort(function(a, b) { return a[0] - b[0]});
-    let neighbors = [];
-    for (let i = 0; i < k && i < dists.length; i++) {
-        neighbors.push(dists[i][1]);
-    }
-    return neighbors;
-}
