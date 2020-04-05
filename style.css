@@ -16,6 +16,17 @@
     margin-bottom: 30px;
 }
 
+#addPoint{
+    justify-content: center;
+    display: grid;
+    margin-bottom: 30px;
+}
+
 input[type="radio"]{
     margin-left: 10px;
+}
+
+
+.pointInputs{
+    width: 100px;
 }

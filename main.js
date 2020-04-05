@@ -3,9 +3,11 @@ const url = require('url');
 const path = require('path');
 const fs = require('fs');
 
-const {app, BrowserWindow, Menu, dialog} = electron;
+const {app, BrowserWindow, Menu, dialog, ipcMain} = electron;
 
 let mainWindow;
+let addWindow;
+let lines = 2;
 
 //Listen for app to be ready
 
@@ -33,6 +35,18 @@ app.on('ready', function(){
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     //Insert menu
     Menu.setApplicationMenu(mainMenu);
+
+    ipcMain.on('lines', (e, data)=>{
+        lines = data.msg;
+    });
+
+    ipcMain.on('sendLines', (e)=>{
+        addWindow.webContents.send('data', {msg: lines});
+    });
+
+    ipcMain.on('point', (e, data)=>{
+        mainWindow.webContents.send('point', data);
+    });
 });
 
 //Create menu template
@@ -42,6 +56,7 @@ const mainMenuTemplate = [
         submenu:[
             {
                 label: 'Load data from file',
+                accelerator: process.platform == 'darwin' ? 'Command+Z' : 'Ctrl+Z',
                 click(){
                     loadFile();
                 }
@@ -54,6 +69,31 @@ const mainMenuTemplate = [
                 }
             }
         ]
+    },
+    {
+        label: 'Add point',
+        accelerator: process.platform == 'darwin' ? 'Command+A' : 'Ctrl+A',
+        click(){
+            addWindow = new BrowserWindow({
+                width: 600,
+                height: 400,
+                webPreferences: {
+                    nodeIntegration: true
+                },
+                parent: mainWindow
+            });
+            //Load html
+            addWindow.loadURL(url.format({
+                pathname: path.join(__dirname, 'inputPoints.html'),
+                protocol: 'file',
+                slashes: true
+            }));
+            //Quit when closed
+            addWindow.on('close', function () {
+                addWindow = null;
+            });
+            addWindow.setMenu(null);
+        }
     }
 ];
 

@@ -7,6 +7,13 @@ ipcRenderer.on('data', (event, data) => {
     processData(data.msg);
 });
 
+//Wyciągnięcie danych z innego okna danych jaki punkt ma być dodany
+let pointToAdd;
+ipcRenderer.on('point', (event, data) => {
+    pointToAdd = data;
+    console.log(pointToAdd);
+});
+
 
 const colorsBackground = ['rgba(0, 255, 0, 0.4)', 'rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)'];
 const colorsBorder =  ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'];
@@ -20,6 +27,7 @@ let sortedData;
 let names = [];
 function processData(allText) {
     let inputs = document.getElementById("inputs");
+
     let lines = [];
     let data = [];
     names = [];
@@ -59,6 +67,8 @@ function processData(allText) {
         sortedData.set(names[i], d);
     });
 
+    ipcRenderer.send("lines", {msg: lines[0].length});
+
     //Dodawanie przycisków wybierania kolumn do wyświetlenia
     let selectCol1 = document.getElementById("selectCol1");
     selectCol1.textContent = '';
@@ -95,14 +105,13 @@ function processData(allText) {
 
 
 //tworzenie tabeli z wybranymi kolumnami do wyświetlenia po wciśnięciu przycisku
-let licznik = 0;
+let licznik = false;
 let myChart;
-const submit = document.getElementById("sub");
-submit.addEventListener("click", ()=>{
+const showChart = () => {
     if(licznik){
         myChart.destroy();
     }
-    licznik++;
+    licznik = true;
     const dataSet = [];
     const col1 = document.getElementsByName('col1');
     const col2 = document.getElementsByName('col2');
@@ -169,4 +178,8 @@ submit.addEventListener("click", ()=>{
             }
         }
     });
+};
+const submit = document.getElementById("sub");
+submit.addEventListener("click", ()=>{
+    showChart();
 });
