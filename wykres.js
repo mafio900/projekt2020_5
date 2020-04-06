@@ -1,5 +1,6 @@
 let p = document.getElementById("p");
 let k = document.getElementById("k");
+const nazwaTwoichPunktow = 'Twoje punkty';
 
 const electron = require('electron');
 const {ipcRenderer} = electron;
@@ -8,15 +9,16 @@ ipcRenderer.on('data', (event, data) => {
 });
 
 //Wyciągnięcie danych z innego okna danych jaki punkt ma być dodany
-let pointToAdd;
+let points = [];
 ipcRenderer.on('point', (event, data) => {
-    pointToAdd = data;
-    console.log(pointToAdd);
+    points.push(data);
+    console.log(points);
+    showChart();
 });
 
 
-const colorsBackground = ['rgba(0, 255, 0, 0.4)', 'rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)'];
-const colorsBorder =  ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'];
+const colorsBackground = ['rgba(0, 255, 0, 0.4)', 'rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)', 'rgba(100, 100, 100, 0.4)'];
+const colorsBorder =  ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(100, 100, 100, 1)'];
 
 
 function coordinate(x, y) {
@@ -31,6 +33,7 @@ function processData(allText) {
     let lines = [];
     let data = [];
     names = [];
+    points = [];
 
     sortedData = new Map();
     inputs.style.display = "flex";
@@ -62,6 +65,7 @@ function processData(allText) {
             }
         }
     });
+    names.push(nazwaTwoichPunktow);
 
     data.forEach((d, i)=>{
         sortedData.set(names[i], d);
@@ -132,11 +136,18 @@ const showChart = () => {
     }
 
     for(name of names){
-        let tmp = sortedData.get(name);
         let tmp2 = [];
-        tmp.forEach((t)=>{
-            tmp2.push(new coordinate(Number.parseInt(t[c1]), Number.parseInt(t[c2])));
-        });
+        if(name === nazwaTwoichPunktow && points !== []){
+            points.forEach((t)=>{
+                tmp2.push(new coordinate(Number.parseInt(t[c1]), Number.parseInt(t[c2])));
+            });
+        }
+        else{
+            let tmp = sortedData.get(name);
+            tmp.forEach((t)=>{
+                tmp2.push(new coordinate(Number.parseInt(t[c1]), Number.parseInt(t[c2])));
+            });
+        }
         dataSet.push(tmp2);
     }
 
@@ -148,9 +159,8 @@ const showChart = () => {
             backgroundColor: colorsBackground[i],
             borderColor: colorsBorder[i],
             borderWidth: 1,
-            radius: 10,
-            pointStyle: "triangle",
-            showLine: true
+            radius: 3,
+            pointStyle: "circle"
         });
     });
 
