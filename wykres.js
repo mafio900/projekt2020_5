@@ -1,5 +1,7 @@
-let p = document.getElementById("p");
-let k = document.getElementById("k");
+let pInput = document.getElementById("p");
+let kInput = document.getElementById("k");
+let p;
+let k;
 const nazwaTwoichPunktow = 'Twoje punkty';
 
 const electron = require('electron');
@@ -12,7 +14,7 @@ ipcRenderer.on('data', (event, data) => {
 let points = [];
 ipcRenderer.on('point', (event, data) => {
     points.push(data);
-    console.log(points);
+    //console.log(points);
     showChart();
 });
 
@@ -27,6 +29,7 @@ function coordinate(x, y) {
 }
 let sortedData;
 let names = [];
+let test = [];
 function processData(allText) {
     let inputs = document.getElementById("inputs");
 
@@ -58,10 +61,16 @@ function processData(allText) {
     }
     names.forEach((name, i)=>{
         data[i] = [];
+        test[i] = [];
         for(let line of lines){
+            let xd = [];
             if(line[line.length-1]===name){
                 line.pop();
                 data[i].push(line);
+                for(let l of line){
+                    xd.push(Number.parseInt(l));
+                }
+                test[i].push(xd);
             }
         }
     });
@@ -70,6 +79,7 @@ function processData(allText) {
     data.forEach((d, i)=>{
         sortedData.set(names[i], d);
     });
+
 
     ipcRenderer.send("lines", {msg: lines[0].length});
 
@@ -111,6 +121,8 @@ function processData(allText) {
 //tworzenie tabeli z wybranymi kolumnami do wyświetlenia po wciśnięciu przycisku
 let licznik = false;
 let myChart;
+let c1;
+let c2;
 const showChart = () => {
     if(licznik){
         myChart.destroy();
@@ -120,8 +132,7 @@ const showChart = () => {
     const col1 = document.getElementsByName('col1');
     const col2 = document.getElementsByName('col2');
 
-    let c1;
-    let c2;
+
     for (let i = 0; i < col1.length; i++) {
         if (col1[i].checked) {
             c1 = col1[i].id.slice(4,col1[i].length);
@@ -150,6 +161,7 @@ const showChart = () => {
         }
         dataSet.push(tmp2);
     }
+    //test = dataSet;
 
     let dataSets = [];
     dataSet.forEach((d, i)=>{
@@ -189,7 +201,79 @@ const showChart = () => {
         }
     });
 };
+const testDiv = document.getElementById("testDiv");
 const submit = document.getElementById("sub");
 submit.addEventListener("click", ()=>{
     showChart();
+    k = Number.parseInt(kInput.value);
+    p = Number.parseInt(pInput.value);
+    testDiv.style.display = "flex";
 });
+
+const testb = document.getElementById("test");
+testb.addEventListener("click", ()=>{
+    //console.log(points);
+    let l = 0;
+    for(let po of points){
+        l++;
+        //console.log(po);
+        const fn = find_neighbors(po);
+        //console.log(fn);
+        const mv = majority_vote(fn);
+        console.log("Podany punkt o wspolrzednych x:"+po[c1]+" y:"+po[c2]+" nalezy do: "+names[mv]);
+    }
+
+});
+
+function distance(p1, p2) {
+    let sum = 0;
+    for(let i =0; i < p1.length-1; i++){
+        sum += Math.pow(Math.abs(p1[i] - p2[i]), p);
+    }
+    sum = Math.pow(sum, 1/p);
+    return sum;
+}
+
+function find_neighbors(point) {
+    const dists = [];
+    for (let i = 0; i < test.length; i++) {
+        for(let j = 0; j < test[i].length; j++) {
+            const dist = distance(point, test[i][j]);
+            dists.push( [ dist, [test[i][j], i] ] );
+        }
+    }
+    dists.sort(function(a, b) { return a[0] - b[0]});
+    const neighbors = [];
+    for (let i = 0; i < k && i < dists.length; i++) {
+        neighbors.push(dists[i][1]);
+    }
+    console.log(neighbors);
+    return neighbors;
+}
+
+function majority_vote(ps) {
+    let votes = new Map();
+    for (let c = 0; c < names.length-1; c++) {
+        votes.set(names[c], 0);
+    }
+    for (let c = 0; c < names.length-1; c++) {
+        for (let i = 0; i < ps.length; i++) {
+            if(c===ps[i][1]) {
+                votes.set(names[c], votes.get(names[c]) + 1);
+            }
+        }
+    }
+    //console.log(ps);
+
+    var max_votes = 0;
+    var winner = null;
+    for (var c = 0; c < names.length-1; c++) {
+        if (votes.get(names[c]) === max_votes) {
+            winner = null;
+        } else if (votes.get(names[c]) > max_votes) {
+            max_votes = votes.get(names[c]);
+            winner = c;
+        }
+    }
+    return winner;
+}

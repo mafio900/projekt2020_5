@@ -17,9 +17,10 @@
 }
 
 #addPoint{
+    display: flex;
+    align-items: center;
     justify-content: center;
-    display: grid;
-    margin-bottom: 30px;
+    flex-direction: column;
 }
 
 input[type="radio"]{
@@ -29,4 +30,11 @@ input[type="radio"]{
 
 .pointInputs{
     width: 100px;
+}
+
+#testDiv{
+    justify-content: center;
+    display: none;
+    align-items: center;
+    margin-bottom: 30px;
 }
