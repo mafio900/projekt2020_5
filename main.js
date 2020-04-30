@@ -7,7 +7,10 @@ const {app, BrowserWindow, Menu, dialog, ipcMain} = electron;
 
 let mainWindow;
 let addWindow;
+let zad3Window;
 let lines = 2;
+
+let zad3Menu;
 
 //Listen for app to be ready
 
@@ -35,6 +38,8 @@ app.on('ready', function(){
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     //Insert menu
     Menu.setApplicationMenu(mainMenu);
+
+    zad3Menu = Menu.buildFromTemplate(zad3MenuTemplate);
 
     ipcMain.on('lines', (e, data)=>{
         lines = data.msg;
@@ -94,12 +99,76 @@ const mainMenuTemplate = [
             });
             addWindow.setMenu(null);
         }
+    },
+    {
+        label: 'Zad3',
+        accelerator: process.platform == 'darwin' ? 'Command+S' : 'Ctrl+S',
+        click(){
+            zad3Window = new BrowserWindow({
+                width: 800,
+                height: 600,
+                webPreferences: {
+                    nodeIntegration: true
+                },
+                parent: mainWindow
+            });
+            //Load html
+            zad3Window.loadURL(url.format({
+                pathname: path.join(__dirname, 'zad3.html'),
+                protocol: 'file',
+                slashes: true
+            }));
+            //Quit when closed
+            zad3Window.on('close', function () {
+                addWindow = null;
+            });
+            zad3Window.setMenu(zad3Menu);
+        }
     }
 ];
+
+const zad3MenuTemplate = [
+    {
+        label: 'File',
+        submenu:[
+            {
+                label: 'Load data from file',
+                accelerator: process.platform == 'darwin' ? 'Command+Z' : 'Ctrl+Z',
+                click(){
+                    loadFileToZad3();
+                }
+            },
+            {
+                label: 'Quit',
+                accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+                click(){
+                    app.quit();
+                }
+            }
+        ]
+    }
+];
+
+
 
 //Add developer tools
 if(process.env.NODE_ENV !== 'production'){
     mainMenuTemplate.push({
+        label: 'Dev tools',
+        submenu: [
+            {
+                label: 'Toggle dev tools',
+                accelerator: process.platform == 'darwin' ? 'Command+D' : 'Ctrl+D',
+                click(item, focusedWindow){
+                    focusedWindow.toggleDevTools();
+                }
+            },
+            {
+                role: 'reload'
+            }
+        ]
+    });
+    zad3MenuTemplate.push({
         label: 'Dev tools',
         submenu: [
             {
@@ -134,3 +203,20 @@ function loadFile() {
     });
 }
 
+function loadFileToZad3() {
+    //Show dialog window
+    dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile']
+    }).then(result => {
+        fs.readFile(result.filePaths[0], 'utf-8', (err, data) => {
+            if(err){
+                alert("An error ocurred reading the file :" + err.message);
+                return;
+            }
+            //Send data to renderer window
+            zad3Window.webContents.send('data', {msg: data});
+        });
+    }).catch(err => {
+        console.log(err);
+    });
+}
