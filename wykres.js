@@ -14,7 +14,6 @@ ipcRenderer.on('data', (event, data) => {
 let points = [];
 ipcRenderer.on('point', (event, data) => {
     points.push(data);
-    //console.log(points);
     showChart();
 });
 
@@ -39,7 +38,7 @@ function processData(allText) {
     points = [];
 
     sortedData = new Map();
-    inputs.style.display = "flex";
+    inputs.style.display = "";
 
     //sortowanie do poszczególnych grup każdej lini
     let allTextLines = allText.split(/\r\n|\n/);
@@ -85,40 +84,61 @@ function processData(allText) {
 
     //Dodawanie przycisków wybierania kolumn do wyświetlenia
     let selectCol1 = document.getElementById("selectCol1");
-    selectCol1.textContent = '';
-    selectCol1.style.display = "flex";
+    selectCol1.className = "field opinion-scale";
+
+    let ul = document.createElement("ul");
+    selectCol1.appendChild(ul);
+    let kolumna = document.createElement("p");
+    kolumna.append("Wybierz kolumny:");
+    kolumna.id = "kolumna";
+    selectCol1.prepend(kolumna);
+
     for(let i = 0; i < lines[0].length; i++){
+        let li = document.createElement("li");
+        ul.appendChild(li);
+
         let node = document.createElement("input");
         node.type = "radio";
-        node.name = "col1";
-        node.id = "col1"+i.toString();
-        selectCol1.appendChild(node);
+        node.name = "opinion1-scale";
+        node.value = i.toString();
+        node.id = "option1-"+ i.toString();
+        li.appendChild(node);
 
         let label = document.createElement("label");
-        label.htmlFor = i.toString();
-        label.textContent = "Kolumna: " + (i+1).toString()+" ";
-        selectCol1.appendChild(label);
+        label.className = "label is-large";
+        label.htmlFor = "option1-"+ i.toString();
+        li.appendChild(label);
+        label.append((i+1).toString());
     }
 
     let selectCol2 = document.getElementById("selectCol2");
-    selectCol2.style.display = "flex";
-    selectCol2.textContent = '';
+    selectCol2.className = "field opinion-scale";
+
+    let ul2 = document.createElement("ul");
+    selectCol2.appendChild(ul2);
+
     for(let i = 0; i < lines[0].length; i++){
+
+        let li = document.createElement("li");
+        ul2.appendChild(li);
+
         let node = document.createElement("input");
         node.type = "radio";
-        node.name = "col2";
-        node.id = "col2"+i.toString();
-        selectCol2.appendChild(node);
+        node.name = "opinion2-scale";
+        node.value = i.toString();
+        node.id = "option2-"+ i.toString();
+        li.appendChild(node);
 
         let label = document.createElement("label");
-        label.htmlFor = i.toString();
-        label.textContent = "Kolumna: " + (i+1).toString()+" ";
-        selectCol2.appendChild(label);
+        label.className = "label is-large";
+        label.htmlFor = "option2-"+ i.toString();
+        li.appendChild(label);
+        label.append((i+1).toString());
     }
 }
 
-
 //tworzenie tabeli z wybranymi kolumnami do wyświetlenia po wciśnięciu przycisku
+
 let licznik = false;
 let myChart;
 let c1;
@@ -129,19 +149,19 @@ const showChart = () => {
     }
     licznik = true;
     const dataSet = [];
-    const col1 = document.getElementsByName('col1');
-    const col2 = document.getElementsByName('col2');
+    const col1 = document.getElementsByName('opinion1-scale');
+    const col2 = document.getElementsByName('opinion2-scale');
 
 
     for (let i = 0; i < col1.length; i++) {
         if (col1[i].checked) {
-            c1 = col1[i].id.slice(4,col1[i].length);
+            c1 = col1[i].id.slice(8,col1[i].length);
             break;
         }
     }
     for (let i = 0; i < col2.length; i++) {
         if (col2[i].checked) {
-            c2 = col2[i].id.slice(4,col2[i].length);
+            c2 = col2[i].id.slice(8,col2[i].length);
             break;
         }
     }
@@ -188,6 +208,7 @@ const showChart = () => {
         options: {
             legend: {
                 display: true,
+                position: 'top',
                 labels: {
                     padding: 10
                 }
@@ -201,24 +222,23 @@ const showChart = () => {
         }
     });
 };
+
+
 const testDiv = document.getElementById("testDiv");
 const submit = document.getElementById("sub");
 submit.addEventListener("click", ()=>{
     showChart();
     k = Number.parseInt(kInput.value);
     p = Number.parseInt(pInput.value);
-    testDiv.style.display = "flex";
+    testDiv.style.display = "";
 });
 
 const testb = document.getElementById("test");
 testb.addEventListener("click", ()=>{
-    //console.log(points);
     let l = 0;
     for(let po of points){
         l++;
-        //console.log(po);
         const fn = find_neighbors(po);
-        //console.log(fn);
         const mv = majority_vote(fn);
         console.log("Podany punkt o wspolrzednych x:"+po[c1]+" y:"+po[c2]+" nalezy do: "+names[mv]);
     }
@@ -263,7 +283,6 @@ function majority_vote(ps) {
             }
         }
     }
-    //console.log(ps);
 
     var max_votes = 0;
     var winner = null;
@@ -277,3 +296,39 @@ function majority_vote(ps) {
     }
     return winner;
 }
+
+// przyciski p i k
+jQuery('<div class="quantity-nav"><div class="quantity-button quantity-up">+</div><div class="quantity-button quantity-down">-</div></div>').insertAfter('.quantity input');
+jQuery('.quantity').each(function() {
+    var spinner = jQuery(this),
+    input = spinner.find('input[type="number"]'),
+    btnUp = spinner.find('.quantity-up'),
+    btnDown = spinner.find('.quantity-down'),
+    min = input.attr('min'),
+    max = input.attr('max');
+
+    btnUp.click(function() {
+        var oldValue = parseFloat(input.val());
+        if (oldValue >= max) {
+            var newVal = oldValue;
+        } else {
+            var newVal = oldValue + 1;
+        }
+        spinner.find("input").val(newVal);
+        spinner.find("input").trigger("change");
+    });
+
+    btnDown.click(function() {
+        var oldValue = parseFloat(input.val());
+        if (oldValue <= min) {
+            var newVal = oldValue;
+        } else {
+            var newVal = oldValue - 1;
+        }
+        spinner.find("input").val(newVal);
+        spinner.find("input").trigger("change");
+
+    });
+
+});
+// koniec przyciski p i k

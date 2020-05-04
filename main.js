@@ -18,7 +18,8 @@ app.on('ready', function(){
     //Create new window
     mainWindow = new BrowserWindow({
         width: 1280,
-        height: 720,
+        height: 800,
+        icon: __dirname + '/assets/icons/win/icon.ico',
         webPreferences: {
             nodeIntegration: true
         }
@@ -82,6 +83,7 @@ const mainMenuTemplate = [
             addWindow = new BrowserWindow({
                 width: 600,
                 height: 400,
+                icon: __dirname + '/assets/icons/win/icon.ico',
                 webPreferences: {
                     nodeIntegration: true
                 },
@@ -107,6 +109,7 @@ const mainMenuTemplate = [
             zad3Window = new BrowserWindow({
                 width: 800,
                 height: 600,
+                icon: __dirname + '/assets/icons/win/icon.ico',
                 webPreferences: {
                     nodeIntegration: true
                 },

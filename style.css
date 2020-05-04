@@ -1,40 +1,219 @@
-*, *::after, *::before{
+
+*{
+    font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+}
+
+/*  main html  */
+
+.addKP {
+    font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+    text-align: center;
+    float: left;
+    width: 250px;
+    padding-bottom: 40%;
+    border-right: 1px solid gray;
+    position: fixed;
+}
+
+#selectCol1, #selectCol2 {
+    float: right;
+}
+
+.chart-container , #wykres {
+    height:45vh;
+    width:45vw;
+    margin: auto;
+}
+
+
+#selectCol1>p {
+    margin: auto;
+    text-align: center;
+}
+
+/* dodawanie p i k */
+
+.quantity {
+    clear: both;
+    width: 180px;
+    text-align: center;
+}
+
+#k,#p, .quantity-up {
+    margin-left: 30%;
+    margin-top: 10px;
+}
+.quantity-down {
+    margin-bottom: -10px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
     margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.quantity>input {
+    color: #00d1b2;
+    width: 45px;
+    height: 42px;
+    line-height: 1.65;
+    float: left;
     padding: 0;
-    box-sizing: border-box;
+    margin: 0;
+    padding-left: 20px;
+    border: 1px solid #eee;
 }
 
-#inputs{
-    justify-content: center;
+.quantity input:focus {
+    outline: 0;
+}
+
+.quantity-nav {
+    float: left;
+    position: relative;
+    height: 42px;
+}
+
+.quantity-button {
+    position: relative;
+    cursor: pointer;
+    border-left: 1px solid #eee;
+    width: 20px;
+    text-align: center;
+    color: #333;
+    font-size: 13px;
+    line-height: 1.7;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.submit{
+    cursor: pointer;
+    border-left: 1px solid #eee;
+    width: 222px;
+    height: 50px;
+    display: inline;
+    text-align: center;
+    background-color: #00d1b2;
+    color: #fefefe;
+    font-size: 16px;
+    line-height: 2;
+}
+
+.quantity-button.quantity-up {
+    position: absolute;
+    height: 50%;
+    top: 0;
+    border-bottom: 1px solid #eee;
+}
+
+.quantity-button.quantity-down {
+    position: absolute;
+    bottom: -1px;
+    height: 50%;
+}
+
+/* wybor kolum do wyswietlenia*/
+
+.opinion-scale ul {
+    list-style: none;
+    display: table;
+    width: 40%;
+    table-layout: fixed;
+    margin: auto;
+    margin-bottom: 0.5em;
+}
+.opinion-scale li {
+    display: table-cell;
+    width: 2%;
+    word-break: break-word;
+}
+.opinion-scale li input[type="radio"] {
     display: none;
-    margin-bottom: 30px;
+}
+.opinion-scale li input[type="radio"]:checked + label {
+    background-color: #00d1b2;
+    color: whitesmoke;
+    border-color: #00d1b2;
+}
+.opinion-scale li label {
+    background-color: white;
+    color: #00d1b2;
+    border: 1px solid whitesmoke;
+    text-align: center;
+    line-height: 1em;
+    position: relative;
+    display:table;
+    width: 100%;
+}
+.opinion-scale .opinion-labels {
+    margin-bottom: 0;
+}
+.opinion-scale .opinion-label label {
+    color: #363636;
+}
+.opinion-scale .opinion-label.min {
+    text-align: left;
+}
+.opinion-scale .opinion-label.mid {
+    text-align: center;
+}
+.opinion-scale .opinion-label.max {
+    text-align: right;
 }
 
-#selectCol1, #selectCol2{
-    justify-content: center;
-    display: none;
-    margin-bottom: 30px;
-}
-
-#addPoint{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-input[type="radio"]{
-    margin-left: 10px;
+.is-large {
+    font-size: 2em;
+    width: 2%;
 }
 
 
-.pointInputs{
-    width: 100px;
+/*  zad3 html  */
+
+#inputs {
+    margin: auto;
+    text-align: center;
 }
 
-#testDiv{
-    justify-content: center;
-    display: none;
-    align-items: center;
-    margin-bottom: 30px;
+#sub, #test {
+    margin-top: 10px;
+}
+
+#inputs>#splitInput {
+    width: 200px;
+    height: 42px;
+    margin: auto;
+    font-size: 16px;
+    text-align: center;
+    color: #222;
+}
+
+#dataText {
+    margin-bottom: auto;
+    margin-top: 14px;
+    text-align: center;
+}
+
+#dataText>p {
+    height: 10px;
+    padding: 0;
+    margin: 0;
+}
+
+#komunikat {
+    width: 100%;
+    text-align: center;
+    margin: 14px;
+    color: green;
+    font-size: 18px;
 }

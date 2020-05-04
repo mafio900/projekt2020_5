@@ -6,10 +6,24 @@ let testujacy = [];
 
 const p = 2;
 const k = 3;
+var komunikat = document.getElementById("komunikat");
+var node = document.createElement("p");
+
+node.style.color = "red";
+node.textContent = "Wczytaj dane (ctrl + z)";
+komunikat.appendChild(node);
 
 ipcRenderer.on('data', (event, data) => {
     processData(data.msg);
+    komunikat.removeChild(node);
+    node.style.color = "green";
+    node.textContent = "Pomyślnie wczytano dane.";
+    komunikat.appendChild(node);
+    setTimeout(()=> {
+        komunikat.removeChild(node);
+    },2500)
 });
+
 
 let names = [];
 let lines = [];
@@ -21,7 +35,7 @@ function processData(allText) {
     data = [];
     test = [];
     let inputs = document.getElementById("inputs");
-    inputs.style.display = "flex";
+    inputs.style.display = "";
     let allTextLines = allText.split(/\r\n|\n/);
 
     for (let i = 0; i < allTextLines.length; i++) {
@@ -68,7 +82,7 @@ splitFile.addEventListener("click", ()=>{
         }
     }
     splitInput.value = "";
-    calculate.style.display = "flex";
+    calculate.style.display = "";
     for(let i = 0; i < toSlice.length; i++) {
         uczacy[i] = [];
         if(toSlice[i].length <= ileW/toSlice.length){
@@ -90,6 +104,12 @@ splitFile.addEventListener("click", ()=>{
     for(let d of toSlice){
         testujacy = [...testujacy, ...d];
     }
+
+    node.textContent = "Podzielono na zbiory uczący i testujący.";
+    komunikat.appendChild(node);
+    setTimeout(()=> {
+        komunikat.removeChild(node);
+    },2500)
 });
 
 const dataText = document.getElementById("dataText");
@@ -101,6 +121,12 @@ calculate.addEventListener("click", ()=>{
         const node = document.createElement("p");
         const br = document.createElement("br");
         node.textContent = (i+1)+". Podany punkt o wspolrzednych: "+ po + " nalezy do: "+names[mv];
+
+        if(names[mv] == "zlosliwy")
+            node.style.color = "red";
+        else
+            node.style.color = "green";
+
         dataText.appendChild(node);
         dataText.appendChild(br);
     }
@@ -156,6 +182,3 @@ function majority_vote(ps) {
     }
     return winner;
 }
-
-
-

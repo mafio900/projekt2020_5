@@ -8,7 +8,7 @@ ipcRenderer.send('sendLines');
 ipcRenderer.on('data', (event, data) => {
     lines = data.msg;
     for(let i = 0; i < lines; i++){
-
+        
         //Dodanie inputów do dodania punktu na wykresie
         let text = document.createElement("input");
         text.type = "number";
@@ -29,6 +29,3 @@ ipcRenderer.on('data', (event, data) => {
         remote.getCurrentWindow().close();
     });
 });
-
-
-
