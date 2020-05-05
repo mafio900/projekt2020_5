@@ -204,6 +204,7 @@ input[type=number] {
     margin-top: 14px;
     text-align: center;
     margin-left: 280px;
+    display: flex;
 }
 
 #dataText>p {
@@ -227,4 +228,8 @@ input[type=number] {
 /* dla przycisków */
 #splitFile, #calculate{
     margin-top: 10px;
+}
+/* style dla tabelki lewej w zad 3 */
+.section-table-2{
+    margin-left: 10%;
 }
