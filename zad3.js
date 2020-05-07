@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {ipcRenderer, remote} = electron;
+const { ipcRenderer, remote } = electron;
 let splitInput = document.getElementById("splitInput");
 let uczacy = [];
 let testujacy = [];
@@ -21,9 +21,9 @@ ipcRenderer.on('data', (event, data) => {
     node.style.color = "green";
     node.textContent = "Pomyślnie wczytano dane.";
     komunikat.appendChild(node);
-    setTimeout(()=> {
+    setTimeout(() => {
         komunikat.removeChild(node);
-    },2500)
+    }, 2500)
 });
 
 
@@ -44,26 +44,27 @@ function processData(allText) {
         allTextLines[i].split(',');
         lines.push(allTextLines[i].split(','));
     }
+    console.log(lines);
 
-    for(let line of lines){
+    for (let line of lines) {
         let flag = false;
-        for(let name of names){
-            if(name === line[line.length-1])
+        for (let name of names) {
+            if (name === line[line.length - 1])
                 flag = true;
         }
-        if(!flag){
-            names.push(line[line.length-1]);
+        if (!flag) {
+            names.push(line[line.length - 1]);
         }
     }
-    names.forEach((name, i)=>{
+    names.forEach((name, i) => {
         data[i] = [];
         test[i] = [];
-        for(let line of lines){
+        for (let line of lines) {
             let xd = [];
-            if(line[line.length-1]===name){
+            if (line[line.length - 1] === name) {
                 line.pop();
                 data[i].push(line);
-                for(let l of line){
+                for (let l of line) {
                     xd.push(Number.parseInt(l));
                 }
                 test[i].push(xd);
@@ -74,88 +75,76 @@ function processData(allText) {
 
 const splitFile = document.getElementById("splitFile");
 const calculate = document.getElementById("calculate");
-splitFile.addEventListener("click", ()=>{
+splitFile.addEventListener("click", () => {
     let ileW = Number.parseInt(splitInput.value);
     k = Number.parseInt(kInput.value);
     p = Number.parseInt(pInput.value);
 
-    console.log('k: '+ k+ ', p: '+p);
+    console.log('k: ' + k + ', p: ' + p);
     let toSlice = [];
-    for(let i = 0; i < data.length; i++){
+    for (let i = 0; i < data.length; i++) {
         toSlice[i] = [];
-        for(let j = 0; j < data[i].length; j++){
+        console.log('data[1]length: ' + data[i].length);
+        for (let j = 0; j < data[i].length; j++) {
             toSlice[i][j] = data[i][j];
         }
     }
     splitInput.value = "";
     calculate.style.display = "";
-    for(let i = 0; i < toSlice.length; i++) {
+    for (let i = 0; i < toSlice.length; i++) {
         uczacy[i] = [];
-        if(toSlice[i].length <= ileW/toSlice.length){
+        if (toSlice[i].length <= ileW / toSlice.length) {
             uczacy[i] = toSlice[i];
-            for (let n = 0; n < (ileW/toSlice.length) - toSlice[i].length; n++) {
-                const r = Math.floor(Math.random()*(toSlice[0].length-1));
+            for (let n = 0; n < (ileW / toSlice.length) - toSlice[i].length; n++) {
+                const r = Math.floor(Math.random() * (toSlice[0].length - 1));
                 uczacy[0].push(toSlice[0][r]);
-                toSlice[0].splice(r,1);
+                toSlice[0].splice(r, 1);
             }
         }
-        else{
+        else {
             for (let j = 0; j < ileW / toSlice.length; j++) {
-                const r = Math.floor(Math.random()*(toSlice[i].length-1));
+                const r = Math.floor(Math.random() * (toSlice[i].length - 1));
                 uczacy[i].push(toSlice[i][r]);
-                toSlice[i].splice(r,1);
+                toSlice[i].splice(r, 1);
             }
         }
     }
-    for(let d of toSlice){
+    for (let d of toSlice) {
         testujacy = [...testujacy, ...d];
     }
 
     node.textContent = "Podzielono na zbiory uczący i testujący.";
     komunikat.appendChild(node);
-    setTimeout(()=> {
+    setTimeout(() => {
         komunikat.removeChild(node);
-    },2500)
+    }, 2500)
 });
 
 const dataText = document.getElementById("dataText");
-calculate.addEventListener("click", ()=>{
-    for(let [i, po] of testujacy.entries()){
-        const fn = find_neighbors(po);
-        const mv = majority_vote(fn);
-        console.log("Podany punkt o wspolrzednych: "+ po + " nalezy do: "+names[mv]);
-        const node = document.createElement("p");
-        const br = document.createElement("br");
-        node.textContent = (i+1)+". Podany punkt o wspolrzednych: "+ po + " nalezy do: "+names[mv];
+calculate.addEventListener("click", () => {
 
-        if(names[mv] == "zlosliwy")
-            node.style.color = "red";
-        else
-            node.style.color = "green";
-
-        dataText.appendChild(node);
-        dataText.appendChild(br);
-    }
+    addLearnTable();
+    addTestingTable();
 });
 
 function distance(p1, p2) {
     let sum = 0;
-    for(let i =0; i < p1.length-1; i++){
+    for (let i = 0; i < p1.length - 1; i++) {
         sum += Math.pow(Math.abs(p1[i] - p2[i]), p);
     }
-    sum = Math.pow(sum, 1/p);
+    sum = Math.pow(sum, 1 / p);
     return sum;
 }
 
 function find_neighbors(point) {
     const dists = [];
     for (let i = 0; i < uczacy.length; i++) {
-        for(let j = 0; j < uczacy[i].length; j++) {
+        for (let j = 0; j < uczacy[i].length; j++) {
             const dist = distance(point, uczacy[i][j]);
-            dists.push( [ dist, [uczacy[i][j], i] ] );
+            dists.push([dist, [uczacy[i][j], i]]);
         }
     }
-    dists.sort(function(a, b) { return a[0] - b[0]});
+    dists.sort(function (a, b) { return a[0] - b[0] });
     const neighbors = [];
     for (let i = 0; i < k && i < dists.length; i++) {
         neighbors.push(dists[i][1]);
@@ -170,7 +159,7 @@ function majority_vote(ps) {
     }
     for (let c = 0; c < names.length; c++) {
         for (let i = 0; i < ps.length; i++) {
-            if(c===ps[i][1]) {
+            if (c === ps[i][1]) {
                 votes.set(names[c], votes.get(names[c]) + 1);
             }
         }
@@ -188,3 +177,105 @@ function majority_vote(ps) {
     }
     return winner;
 }
+
+//wyswietla tabele ze zbiorem testujacym
+function addTestingTable() {
+    var div1 = document.createElement('div');
+    div1.className = "section-table-2";
+    var h = document.createElement('h3');
+    h.innerHTML = "Zestaw testujących";
+    div1.appendChild(h);
+    var table = document.createElement('table');
+    table.className = "table";
+    for (let [i, po] of testujacy.entries()) {
+        const fn = find_neighbors(po);
+        const mv = majority_vote(fn);
+
+        console.log("Podany punkt o wspolrzednych: " + po + " nalezy do: " + names[mv]);
+
+        //tworzymy wiersze
+        var tr = document.createElement('tr');
+
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode(i + 1));
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode(po));
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode(names[mv]));
+        tr.appendChild(td);
+
+        //dla każdego wiersza sprawdzamy czy wyliczona wartość mv jest zgodna z typem punktu z excela
+        //jeśli jest zgodna to w tabeli zaznaczy się na kolor zielony jeśli nie to na czerwony
+        for (let i = 0; i < 2; i++) {
+            for (let j = 0; j < data[i].length; j++) {
+                if (po === data[i][j]) {
+                    if (mv === i) {
+                        tr.style.backgroundColor = "green";
+                    }
+                    else {
+                        tr.style.backgroundColor = "red";
+                    }
+                }
+            }
+        
+            table.appendChild(tr);
+        }
+        div1.appendChild(table);
+        dataText.appendChild(div1);
+    }
+}
+
+//wyświetla tebelę ze zbiorem uczącym się
+function addLearnTable() {
+    var div2 = document.createElement('div');
+    div2.className = "section-table-1";
+    var h = document.createElement('h3');
+    h.innerHTML = "Zestaw uczących się";
+    div2.appendChild(h);
+    var table2 = document.createElement('table');
+    table2.className = "table";
+
+    //najpierw uczacy[0] czyli lagodne
+    for (j = 0; j < uczacy[0].length; j++) {
+        var tr = document.createElement('tr');
+
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode(j + 1));
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode(uczacy[0][j]));
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode('lagodny'));
+        tr.appendChild(td);
+
+        table2.appendChild(tr);
+    }
+
+    //potem wyswietlane uczacy[1] czyli zlosliwe  --mozna by to wyswietlac jakos randomowo ale nie wiem za bardzo jak 
+    for (j = 0; j < uczacy[1].length; j++) {
+        var tr = document.createElement('tr');
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode(j + uczacy[0].length+1));
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode(uczacy[1][j]));
+        tr.appendChild(td);
+
+        var td = document.createElement('td');
+        td.appendChild(document.createTextNode('zlosliwy'));
+        tr.appendChild(td);
+
+        table2.appendChild(tr);
+    }
+    div2.appendChild(table2);
+    dataText.appendChild(div2);
+}
+

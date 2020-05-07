@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <title>Wykres projektowanie</title>
-    <link rel="stylesheet" type="text/css" title="Cool stylesheet" href="style.css">
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <link rel="stylesheet" type="text/css" title="Cool stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
     <script src="jquery.min.js"></script>
     <script>if (window.module) module = window.module;</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 </head>
+
 <body>
-    <div id="selectCol1">
-    </div>
-    <div id="selectCol2">
-    </div>
+
     <div id="inputs" class="addKP">
         <div class="quantity">
             Podaj liczbę sąsiadów k:
@@ -22,17 +22,21 @@
             Podaj odległosć p:
             <input type="number" min="-999" max="999" value="0" id="p">
         </div>
-        <button id="sub" class="submit" type="submit" >Rysuj wykres</input>
-            <div id="testDiv">
-                <button id="test" class="submit">Klasyfikuj dodane punkty</button>
-            </div>
+        <button id="sub" class="submit" type="submit">Rysuj wykres</button>
+        <div id="testDiv">
+            <button id="test" class="submit">Klasyfikuj dodane punkty</button>
         </div>
-        <div id="root">
-            <div class="chart-container">
-            </div>
+    </div>
+    <div id="root">
+        <div id="selectCol1"></div>
+        <div id="selectCol2"></div>
+        <div class="chart-container">
             <canvas id="wykres" width="400" height="400"></canvas>
         </div>
+
+    </div>
     </div>
     <script src="wykres.js" type="text/javascript"></script>
 </body>
+
 </html>
