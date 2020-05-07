@@ -107,8 +107,8 @@ const mainMenuTemplate = [
         accelerator: process.platform == 'darwin' ? 'Command+S' : 'Ctrl+S',
         click(){
             zad3Window = new BrowserWindow({
-                width: 1200,
-                height: 800,
+                width: 800,
+                height: 600,
                 icon: __dirname + '/assets/icons/win/icon.ico',
                 webPreferences: {
                     nodeIntegration: true
