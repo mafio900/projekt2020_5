@@ -1,29 +1,18 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
     <title>Zad3</title>
     <link rel="stylesheet" type="text/css" title="Cool stylesheet" href="style.css">
 </head>
-
 <body>
-    <div id="inputs" class="addKP">
-        <div id="komunikat"></div>
-        <div class="quantity">
-            Podaj liczbę sąsiadów k:
-            <input type="number" min="-999" max="999" value="0" id="k_zad3">
-        </div>
-        <div class="quantity">
-            Podaj odległosć p:
-            <input type="number" min="-999" max="999" value="0" id="p_zad3">
-        </div>
+    <div id="komunikat"></div>
+    <div id="inputs">
         <input id="splitInput" type="number" placeholder="Wielkość zbioru uczącego">
-        <button id="splitFile" class="submit">Podziel plik</button><br/>
-        <button style="display: none" id="calculate" class="submit">Oblicz</button>
+        <button id="splitFile"  class="submit">Podziel plik</button><br />
+        <button style="display: none" id="calculate"  class="submit">Oblicz</button>
     </div>
     <div id="dataText">
     </div>
     <script src="zad3.js" type="text/javascript"></script>
 </body>
-
 </html>

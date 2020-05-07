@@ -196,14 +196,12 @@ input[type=number] {
     font-size: 16px;
     text-align: center;
     color: #222;
-    margin-top: 15px;
 }
 
 #dataText {
     margin-bottom: auto;
     margin-top: 14px;
     text-align: center;
-    margin-left: 280px;
 }
 
 #dataText>p {
@@ -213,18 +211,9 @@ input[type=number] {
 }
 
 #komunikat {
+    width: 100%;
     text-align: center;
     margin: 14px;
     color: green;
     font-size: 18px;
-}
-/* dla k i p z zad 3 */
-#k_zad3,#p_zad3 {
-    margin-left: 30%;
-    margin-top: 10px;
-}
-
-/* dla przycisków */
-#splitFile, #calculate{
-    margin-top: 10px;
 }
