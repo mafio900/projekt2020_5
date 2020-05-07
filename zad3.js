@@ -91,25 +91,36 @@ splitFile.addEventListener("click", () => {
     }
     splitInput.value = "";
     calculate.style.display = "";
-    for (let i = 0; i < toSlice.length; i++) {
+    for(let [i,ts] of toSlice.entries()){
         uczacy[i] = [];
-        if (toSlice[i].length <= ileW / toSlice.length) {
-            uczacy[i] = toSlice[i];
-            for (let n = 0; n < (ileW / toSlice.length) - toSlice[i].length; n++) {
-                const r = Math.floor(Math.random() * (toSlice[0].length - 1));
-                uczacy[0].push(toSlice[0][r]);
-                toSlice[0].splice(r, 1);
-            }
+    }
+
+    for(let i = 0; i < toSlice.length; i++) {
+        const l = toSlice[i].length;
+        for (let j = 0; j < ileW / toSlice.length && j < l; j++) {
+            const r = Math.floor(Math.random() * (toSlice[i].length - 1));
+            uczacy[i].push(toSlice[i][r]);
+            toSlice[i].splice(r, 1);
         }
-        else {
-            for (let j = 0; j < ileW / toSlice.length; j++) {
-                const r = Math.floor(Math.random() * (toSlice[i].length - 1));
-                uczacy[i].push(toSlice[i][r]);
-                toSlice[i].splice(r, 1);
+        if(uczacy[i].length < ileW/toSlice.length){
+            let left = (ileW / toSlice.length) - uczacy[i].length;
+            for(let ii = 0; ii < toSlice.length; ii++) {
+                if(toSlice[ii].length > 0) {
+                    const ll = toSlice[ii].length;
+                    let licz = 0;
+                    for (let j = 0; j < left && j < ll; j++) {
+                        const r = Math.floor(Math.random() * (toSlice[ii].length - 1));
+                        uczacy[ii].push(toSlice[ii][r]);
+                        toSlice[ii].splice(r, 1);
+                        licz++;
+                        console.log(licz);
+                    }
+                    left -=licz;
+                }
             }
         }
     }
-    for (let d of toSlice) {
+    for(let d of toSlice){
         testujacy = [...testujacy, ...d];
     }
 
@@ -165,9 +176,9 @@ function majority_vote(ps) {
         }
     }
 
-    var max_votes = 0;
-    var winner = null;
-    for (var c = 0; c < names.length; c++) {
+    let max_votes = 0;
+    let winner = null;
+    for (let c = 0; c < names.length; c++) {
         if (votes.get(names[c]) === max_votes) {
             winner = null;
         } else if (votes.get(names[c]) > max_votes) {
@@ -187,6 +198,7 @@ function addTestingTable() {
     div1.appendChild(h);
     var table = document.createElement('table');
     table.className = "table";
+    let classificationPercent = 0;
     for (let [i, po] of testujacy.entries()) {
         const fn = find_neighbors(po);
         const mv = majority_vote(fn);
@@ -215,18 +227,27 @@ function addTestingTable() {
                 if (po === data[i][j]) {
                     if (mv === i) {
                         tr.style.backgroundColor = "green";
+                        classificationPercent++;
                     }
                     else {
                         tr.style.backgroundColor = "red";
                     }
                 }
             }
-        
             table.appendChild(tr);
         }
-        div1.appendChild(table);
-        dataText.appendChild(div1);
+
     }
+    console.log(classificationPercent/testujacy.length);
+    const classificationTr = document.createElement('tr');
+    const classificationTd = document.createElement('td');
+    classificationTd.textContent = "Dokładność klasyfikacji wynosi: " + ((classificationPercent/testujacy.length)*100).toPrecision(4).toString() + "%";
+    classificationTd.colSpan = 3;
+    classificationTr.appendChild(classificationTd);
+    table.appendChild(classificationTr);
+    div1.appendChild(table);
+    dataText.appendChild(div1);
+
 }
 
 //wyświetla tebelę ze zbiorem uczącym się
