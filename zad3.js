@@ -4,8 +4,10 @@ let splitInput = document.getElementById("splitInput");
 let uczacy = [];
 let testujacy = [];
 
-const p = 2;
-const k = 3;
+let pInput = document.getElementById("p_zad3");
+let kInput = document.getElementById("k_zad3");
+let p;
+let k;
 var komunikat = document.getElementById("komunikat");
 var node = document.createElement("p");
 
@@ -74,6 +76,10 @@ const splitFile = document.getElementById("splitFile");
 const calculate = document.getElementById("calculate");
 splitFile.addEventListener("click", ()=>{
     let ileW = Number.parseInt(splitInput.value);
+    k = Number.parseInt(kInput.value);
+    p = Number.parseInt(pInput.value);
+
+    console.log('k: '+ k+ ', p: '+p);
     let toSlice = [];
     for(let i = 0; i < data.length; i++){
         toSlice[i] = [];
