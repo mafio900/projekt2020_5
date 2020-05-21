@@ -99,15 +99,17 @@ function addTestingTable() {
 
         //dla każdego wiersza sprawdzamy czy wyliczona wartość mv jest zgodna z typem punktu z excela
         //jeśli jest zgodna to w tabeli zaznaczy się na kolor zielony jeśli nie to na czerwony
-        for (let i = 0; i < 2; i++) {
-            for (let j = 0; j < data[i].length; j++) {
-                if (po === data[i][j]) {
-                    if (mv === i) {
+        for (let ii = 0; ii < data.length; ii++) {
+            for (let jj = 0; jj < data[ii].length; jj++) {
+                if (po === data[ii][jj]) {
+                    if (mv === ii) {
                         tr.style.backgroundColor = "green";
                         classificationPercent++;
+                        break;
                     }
                     else {
                         tr.style.backgroundColor = "red";
+                        break;
                     }
                 }
             }
@@ -136,43 +138,55 @@ function addLearnTable() {
     div2.appendChild(h);
     var table2 = document.createElement('table');
     table2.className = "table";
+    let classificationPercent = 0;
+    let iksde = 0;
+    for(let i = 0; i < uczacy.length; i++){
+        for (let j = 0; j < uczacy[i].length; j++) {
+            const fn = find_neighbors(uczacy[i][j], uczacy);
+            const mv = majority_vote(fn);
 
-    //najpierw uczacy[0] czyli lagodne
-    for (j = 0; j < uczacy[0].length; j++) {
-        var tr = document.createElement('tr');
+            const tr = document.createElement('tr');
 
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode(j + 1));
-        tr.appendChild(td);
+            let td = document.createElement('td');
+            td.appendChild(document.createTextNode(++iksde));
+            tr.appendChild(td);
 
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode(uczacy[0][j]));
-        tr.appendChild(td);
+            td = document.createElement('td');
+            td.appendChild(document.createTextNode(uczacy[i][j]));
+            tr.appendChild(td);
 
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode('lagodny'));
-        tr.appendChild(td);
+            td = document.createElement('td');
+            td.appendChild(document.createTextNode(names[mv]));
+            tr.appendChild(td);
 
-        table2.appendChild(tr);
+            for (let ii = 0; ii < data.length; ii++) {
+                for (let jj = 0; jj < data[ii].length; jj++) {
+                    if (uczacy[i][j] === data[ii][jj]) {
+                        if (mv === ii) {
+                            tr.style.backgroundColor = "green";
+                            classificationPercent++;
+                            break;
+                        }
+                        else {
+                            tr.style.backgroundColor = "red";
+                            break;
+                        }
+                    }
+                }
+                table2.appendChild(tr);
+            }
+        }
     }
-
-    //potem wyswietlane uczacy[1] czyli zlosliwe  --mozna by to wyswietlac jakos randomowo ale nie wiem za bardzo jak 
-    for (j = 0; j < uczacy[1].length; j++) {
-        var tr = document.createElement('tr');
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode(j + uczacy[0].length+1));
-        tr.appendChild(td);
-
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode(uczacy[1][j]));
-        tr.appendChild(td);
-
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode('zlosliwy'));
-        tr.appendChild(td);
-
-        table2.appendChild(tr);
+    const classificationTr = document.createElement('tr');
+    const classificationTd = document.createElement('td');
+    let sum = 0;
+    for(let [iks, lol] of uczacy.entries() ){
+        sum += lol.length;
     }
+    classificationTd.textContent = "Dokładność klasyfikacji wynosi: " + ((classificationPercent/sum)*100).toPrecision(4).toString() + "%";
+    classificationTd.colSpan = 3;
+    classificationTr.appendChild(classificationTd);
+    table2.appendChild(classificationTr);
     div2.appendChild(table2);
     dataText.appendChild(div2);
 }
