@@ -1,7 +1,6 @@
 {
   "name": "projekt",
   "version": "1.0.0",
-  "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -16,5 +15,14 @@
   },
   "devDependencies": {
     "electron-packager": "^14.2.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mafio900/projekt2020_5.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mafio900/projekt2020_5/issues"
+  },
+  "homepage": "https://github.com/mafio900/projekt2020_5#readme",
+  "description": ""
 }

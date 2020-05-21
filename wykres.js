@@ -4,10 +4,23 @@ let p;
 let k;
 const nazwaTwoichPunktow = 'Twoje punkty';
 
+let komunikat = document.getElementById("komunikat");
+let node = document.createElement("p");
+node.style.color = "red";
+node.textContent = "Wczytaj dane (ctrl + z)";
+komunikat.appendChild(node);
+
 const electron = require('electron');
 const {ipcRenderer} = electron;
 ipcRenderer.on('data', (event, data) => {
     processData(data.msg);
+    komunikat.removeChild(node);
+    node.style.color = "green";
+    node.textContent = "Pomyślnie wczytano dane.";
+    komunikat.appendChild(node);
+    setTimeout(() => {
+        komunikat.removeChild(node)
+    }, 2500);
 });
 
 //Wyciągnięcie danych z innego okna danych jaki punkt ma być dodany
@@ -29,11 +42,12 @@ function coordinate(x, y) {
 let sortedData;
 let names = [];
 let test = [];
+let data = [];
 function processData(allText) {
     let inputs = document.getElementById("inputs");
 
     let lines = [];
-    let data = [];
+    data = [];
     names = [];
     points = [];
 
@@ -67,7 +81,7 @@ function processData(allText) {
                 line.pop();
                 data[i].push(line);
                 for(let l of line){
-                    xd.push(Number.parseInt(l));
+                    xd.push(Number.parseFloat(l));
                 }
                 test[i].push(xd);
             }
@@ -84,6 +98,7 @@ function processData(allText) {
 
     //Dodawanie przycisków wybierania kolumn do wyświetlenia
     let selectCol1 = document.getElementById("selectCol1");
+    selectCol1.textContent = "";
     selectCol1.className = "field opinion-scale";
 
     let ul = document.createElement("ul");
@@ -112,6 +127,7 @@ function processData(allText) {
     }
 
     let selectCol2 = document.getElementById("selectCol2");
+    selectCol2.textContent = "";
     selectCol2.className = "field opinion-scale";
 
     let ul2 = document.createElement("ul");
@@ -170,13 +186,13 @@ const showChart = () => {
         let tmp2 = [];
         if(name === nazwaTwoichPunktow && points !== []){
             points.forEach((t)=>{
-                tmp2.push(new coordinate(Number.parseInt(t[c1]), Number.parseInt(t[c2])));
+                tmp2.push(new coordinate(Number.parseFloat(t[c1]), Number.parseFloat(t[c2])));
             });
         }
         else{
             let tmp = sortedData.get(name);
             tmp.forEach((t)=>{
-                tmp2.push(new coordinate(Number.parseInt(t[c1]), Number.parseInt(t[c2])));
+                tmp2.push(new coordinate(Number.parseFloat(t[c1]), Number.parseFloat(t[c2])));
             });
         }
         dataSet.push(tmp2);
@@ -191,7 +207,7 @@ const showChart = () => {
             backgroundColor: colorsBackground[i],
             borderColor: colorsBorder[i],
             borderWidth: 1,
-            radius: 3,
+            radius: 6,
             pointStyle: "circle"
         });
     });
@@ -238,7 +254,7 @@ testb.addEventListener("click", ()=>{
     let l = 0;
     for(let po of points){
         l++;
-        const fn = find_neighbors(po);
+        const fn = find_neighbors(po, test);
         const mv = majority_vote(fn);
         console.log("Podany punkt o wspolrzednych x:"+po[c1]+" y:"+po[c2]+" nalezy do: "+names[mv]);
     }
@@ -254,12 +270,12 @@ function distance(p1, p2) {
     return sum;
 }
 
-function find_neighbors(point) {
+function find_neighbors(point, tt) {
     const dists = [];
-    for (let i = 0; i < test.length; i++) {
-        for(let j = 0; j < test[i].length; j++) {
-            const dist = distance(point, test[i][j]);
-            dists.push( [ dist, [test[i][j], i] ] );
+    for (let i = 0; i < tt.length; i++) {
+        for(let j = 0; j < tt[i].length; j++) {
+            const dist = distance(point, tt[i][j]);
+            dists.push( [ dist, [tt[i][j], i] ] );
         }
     }
     dists.sort(function(a, b) { return a[0] - b[0]});

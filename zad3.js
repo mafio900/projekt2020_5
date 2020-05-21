@@ -1,78 +1,7 @@
-const electron = require('electron');
-const { ipcRenderer, remote } = electron;
-let splitInput = document.getElementById("splitInput");
 let uczacy = [];
 let testujacy = [];
 
-let pInput = document.getElementById("p_zad3");
-let kInput = document.getElementById("k_zad3");
-let p;
-let k;
-var komunikat = document.getElementById("komunikat");
-var node = document.createElement("p");
-
-node.style.color = "red";
-node.textContent = "Wczytaj dane (ctrl + z)";
-komunikat.appendChild(node);
-
-ipcRenderer.on('data', (event, data) => {
-    processData(data.msg);
-    komunikat.removeChild(node);
-    node.style.color = "green";
-    node.textContent = "Pomyślnie wczytano dane.";
-    komunikat.appendChild(node);
-    setTimeout(() => {
-        komunikat.removeChild(node);
-    }, 2500)
-});
-
-
-let names = [];
-let lines = [];
-let data = [];
-let test = [];
-function processData(allText) {
-    names = [];
-    lines = [];
-    data = [];
-    test = [];
-    let inputs = document.getElementById("inputs");
-    inputs.style.display = "";
-    let allTextLines = allText.split(/\r\n|\n/);
-
-    for (let i = 0; i < allTextLines.length; i++) {
-        allTextLines[i].split(',');
-        lines.push(allTextLines[i].split(','));
-    }
-    console.log(lines);
-
-    for (let line of lines) {
-        let flag = false;
-        for (let name of names) {
-            if (name === line[line.length - 1])
-                flag = true;
-        }
-        if (!flag) {
-            names.push(line[line.length - 1]);
-        }
-    }
-    names.forEach((name, i) => {
-        data[i] = [];
-        test[i] = [];
-        for (let line of lines) {
-            let xd = [];
-            if (line[line.length - 1] === name) {
-                line.pop();
-                data[i].push(line);
-                for (let l of line) {
-                    xd.push(Number.parseInt(l));
-                }
-                test[i].push(xd);
-            }
-        }
-    });
-}
-
+const splitInput = document.getElementById("splitInput");
 const splitFile = document.getElementById("splitFile");
 const calculate = document.getElementById("calculate");
 splitFile.addEventListener("click", () => {
@@ -133,61 +62,9 @@ splitFile.addEventListener("click", () => {
 
 const dataText = document.getElementById("dataText");
 calculate.addEventListener("click", () => {
-
     addLearnTable();
     addTestingTable();
 });
-
-function distance(p1, p2) {
-    let sum = 0;
-    for (let i = 0; i < p1.length - 1; i++) {
-        sum += Math.pow(Math.abs(p1[i] - p2[i]), p);
-    }
-    sum = Math.pow(sum, 1 / p);
-    return sum;
-}
-
-function find_neighbors(point) {
-    const dists = [];
-    for (let i = 0; i < uczacy.length; i++) {
-        for (let j = 0; j < uczacy[i].length; j++) {
-            const dist = distance(point, uczacy[i][j]);
-            dists.push([dist, [uczacy[i][j], i]]);
-        }
-    }
-    dists.sort(function (a, b) { return a[0] - b[0] });
-    const neighbors = [];
-    for (let i = 0; i < k && i < dists.length; i++) {
-        neighbors.push(dists[i][1]);
-    }
-    return neighbors;
-}
-
-function majority_vote(ps) {
-    let votes = new Map();
-    for (let c = 0; c < names.length; c++) {
-        votes.set(names[c], 0);
-    }
-    for (let c = 0; c < names.length; c++) {
-        for (let i = 0; i < ps.length; i++) {
-            if (c === ps[i][1]) {
-                votes.set(names[c], votes.get(names[c]) + 1);
-            }
-        }
-    }
-
-    let max_votes = 0;
-    let winner = null;
-    for (let c = 0; c < names.length; c++) {
-        if (votes.get(names[c]) === max_votes) {
-            winner = null;
-        } else if (votes.get(names[c]) > max_votes) {
-            max_votes = votes.get(names[c]);
-            winner = c;
-        }
-    }
-    return winner;
-}
 
 //wyswietla tabele ze zbiorem testujacym
 function addTestingTable() {
@@ -200,7 +77,7 @@ function addTestingTable() {
     table.className = "table";
     let classificationPercent = 0;
     for (let [i, po] of testujacy.entries()) {
-        const fn = find_neighbors(po);
+        const fn = find_neighbors(po, uczacy);
         const mv = majority_vote(fn);
 
         console.log("Podany punkt o wspolrzednych: " + po + " nalezy do: " + names[mv]);
