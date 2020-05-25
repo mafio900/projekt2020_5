@@ -258,7 +258,6 @@ testb.addEventListener("click", ()=>{
         const mv = majority_vote(fn);
         console.log("Podany punkt o wspolrzednych x:"+po[c1]+" y:"+po[c2]+" nalezy do: "+names[mv]);
     }
-
 });
 
 function distance(p1, p2) {
@@ -283,7 +282,6 @@ function find_neighbors(point, tt) {
     for (let i = 0; i < k && i < dists.length; i++) {
         neighbors.push(dists[i][1]);
     }
-    console.log(neighbors);
     return neighbors;
 }
 

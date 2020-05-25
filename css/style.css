@@ -221,7 +221,7 @@ input[type=number] {
 }
 
 /* dla przycisków */
-#splitFile, #calculate{
+#splitFile, #calculate, #walidacjaOblicz{
     margin-top: 10px;
 }
 /* style dla tabelki lewej w zad 3 */

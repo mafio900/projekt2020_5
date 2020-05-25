@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" title="Cool stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
     <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.min.js"></script>
     <script src="jquery.min.js"></script>
     <script>if (window.module) module = window.module;</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -34,11 +35,15 @@
                 <button id="splitFile" class="submit">Podziel plik</button><br/>
                 <button style="display: none" id="calculate" class="submit">Oblicz</button>
             </div>
+            <div id="walidacjaButtons" class="tabcontent">
+                <button id="splitValidation" class="submit">Podziel</button>
+            </div>
         </div>
         <div id="root" class="col-9">
             <div class="tab">
                 <button class="tablinks" onclick="changeTab(event, 'char')">Wykres</button>
                 <button class="tablinks" onclick="changeTab(event, 'zad3')">Zad3</button>
+                <button class="tablinks" onclick="changeTab(event, 'walidacja')">Dziesięcio krotna walidacja</button>
             </div>
             <div id="char" class="tabcontent">
                 <div id="selectCol1"></div>
@@ -52,10 +57,16 @@
 
                 </div>
             </div>
+            <div id="walidacja" class="tabcontent">
+                <div id="wal">
+
+                </div>
+            </div>
         </div>
     </div>
     <script src="wykres.js" type="text/javascript"></script>
     <script src="zad3.js" type="text/javascript"></script>
+    <script src="walidacja.js" type="text/javascript"></script>
     <script src="tabs.js" type="text/javascript"></script>
 </body>
 

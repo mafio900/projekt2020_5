@@ -9,11 +9,9 @@ splitFile.addEventListener("click", () => {
     k = Number.parseInt(kInput.value);
     p = Number.parseInt(pInput.value);
 
-    console.log('k: ' + k + ', p: ' + p);
     let toSlice = [];
     for (let i = 0; i < data.length; i++) {
         toSlice[i] = [];
-        console.log('data[1]length: ' + data[i].length);
         for (let j = 0; j < data[i].length; j++) {
             toSlice[i][j] = data[i][j];
         }
@@ -126,7 +124,6 @@ function addTestingTable() {
     table.appendChild(classificationTr);
     div1.appendChild(table);
     dataText.appendChild(div1);
-
 }
 
 //wyświetla tebelę ze zbiorem uczącym się
