@@ -51,6 +51,7 @@ function knn10(arr) {
     k = Number.parseInt(kInput.value);
     p = Number.parseInt(pInput.value);
     const wal = document.getElementById('wal');
+    wal.textContent = "";
     let s = 0;
     for(let m = 0; m < arr.length; m++) {
         let t = [];

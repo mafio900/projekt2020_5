@@ -262,7 +262,7 @@ testb.addEventListener("click", ()=>{
 
 function distance(p1, p2) {
     let sum = 0;
-    for(let i =0; i < p1.length-1; i++){
+    for(let i = 0; i < p1.length; i++){
         sum += Math.pow(Math.abs(p1[i] - p2[i]), p);
     }
     sum = Math.pow(sum, 1/p);

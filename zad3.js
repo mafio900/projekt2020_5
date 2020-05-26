@@ -5,6 +5,8 @@ const splitInput = document.getElementById("splitInput");
 const splitFile = document.getElementById("splitFile");
 const calculate = document.getElementById("calculate");
 splitFile.addEventListener("click", () => {
+    uczacy = [];
+    testujacy = [];
     let ileW = Number.parseInt(splitInput.value);
     k = Number.parseInt(kInput.value);
     p = Number.parseInt(pInput.value);
@@ -40,7 +42,7 @@ splitFile.addEventListener("click", () => {
                         uczacy[ii].push(toSlice[ii][r]);
                         toSlice[ii].splice(r, 1);
                         licz++;
-                        console.log(licz);
+                        //console.log(licz);
                     }
                     left -=licz;
                 }
@@ -78,7 +80,7 @@ function addTestingTable() {
         const fn = find_neighbors(po, uczacy);
         const mv = majority_vote(fn);
 
-        console.log("Podany punkt o wspolrzednych: " + po + " nalezy do: " + names[mv]);
+        //console.log("Podany punkt o wspolrzednych: " + po + " nalezy do: " + names[mv]);
 
         //tworzymy wiersze
         var tr = document.createElement('tr');
@@ -115,7 +117,7 @@ function addTestingTable() {
         }
 
     }
-    console.log(classificationPercent/testujacy.length);
+    //console.log(classificationPercent/testujacy.length);
     const classificationTr = document.createElement('tr');
     const classificationTd = document.createElement('td');
     classificationTd.textContent = "Dokładność klasyfikacji wynosi: " + ((classificationPercent/testujacy.length)*100).toPrecision(4).toString() + "%";
@@ -185,6 +187,7 @@ function addLearnTable() {
     classificationTr.appendChild(classificationTd);
     table2.appendChild(classificationTr);
     div2.appendChild(table2);
+    dataText.textContent = "";
     dataText.appendChild(div2);
 }
 
