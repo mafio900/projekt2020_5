@@ -5,6 +5,15 @@ const splitInput = document.getElementById("splitInput");
 const splitFile = document.getElementById("splitFile");
 const calculate = document.getElementById("calculate");
 splitFile.addEventListener("click", () => {
+    if(!(data.length > 0)){
+        node.textContent = "Nie wczytano pliku!";
+        node.style.color = "red";
+        komunikat.appendChild(node);
+        setTimeout(() => {
+            komunikat.removeChild(node);
+        }, 1500);
+        return;
+    }
     uczacy = [];
     testujacy = [];
     let ileW = Number.parseInt(splitInput.value);
@@ -12,13 +21,25 @@ splitFile.addEventListener("click", () => {
     p = Number.parseInt(pInput.value);
 
     let toSlice = [];
+    let all=0;
     for (let i = 0; i < data.length; i++) {
         toSlice[i] = [];
         for (let j = 0; j < data[i].length; j++) {
             toSlice[i][j] = data[i][j];
+            all++;
         }
     }
     splitInput.value = "";
+    if(ileW+1 >= all){
+        node.textContent = "Podano błędną wielkość zbioru uczącego";
+        node.style.color = "red";
+        komunikat.appendChild(node);
+        setTimeout(() => {
+            komunikat.removeChild(node);
+        }, 1500);
+        calculate.style.display = "none";
+        return;
+    }
     calculate.style.display = "";
     for(let [i,ts] of toSlice.entries()){
         uczacy[i] = [];
@@ -54,10 +75,11 @@ splitFile.addEventListener("click", () => {
     }
 
     node.textContent = "Podzielono na zbiory uczący i testujący.";
+    node.style.color = "green";
     komunikat.appendChild(node);
     setTimeout(() => {
         komunikat.removeChild(node);
-    }, 2500)
+    }, 2500);
 });
 
 const dataText = document.getElementById("dataText");
@@ -130,12 +152,12 @@ function addTestingTable() {
 
 //wyświetla tebelę ze zbiorem uczącym się
 function addLearnTable() {
-    var div2 = document.createElement('div');
+    const div2 = document.createElement('div');
     div2.className = "section-table-1";
-    var h = document.createElement('h3');
+    const h = document.createElement('h3');
     h.innerHTML = "Zestaw uczących się";
     div2.appendChild(h);
-    var table2 = document.createElement('table');
+    const table2 = document.createElement('table');
     table2.className = "table";
     let classificationPercent = 0;
     let iksde = 0;

@@ -19,11 +19,24 @@ ipcRenderer.on('data', (event, data) => {
     node.textContent = "Pomyślnie wczytano dane.";
     komunikat.appendChild(node);
     setTimeout(() => {
-        komunikat.removeChild(node)
+        komunikat.removeChild(node);
     }, 2500);
 });
 
 //Wyciągnięcie danych z innego okna danych jaki punkt ma być dodany
+const addPointButton = document.getElementById("addPointButton");
+addPointButton.addEventListener("click", ()=>{
+    if(!(data.length > 0)){
+        node.textContent = "Nie wczytano pliku!";
+        komunikat.appendChild(node);
+        setTimeout(() => {
+            komunikat.removeChild(node);
+        }, 1500);
+        return;
+    }
+    ipcRenderer.send("showAddPoint");
+});
+
 let points = [];
 ipcRenderer.on('point', (event, data) => {
     points.push(data);
@@ -52,15 +65,36 @@ function processData(allText) {
     points = [];
 
     sortedData = new Map();
-    inputs.style.display = "";
 
     //sortowanie do poszczególnych grup każdej lini
     let allTextLines = allText.split(/\r\n|\n/);
 
     for (var i = 0; i < allTextLines.length; i++) {
-        allTextLines[i].split(',');
         lines.push(allTextLines[i].split(','));
     }
+
+    let columns = lines[0].length;
+    for(let line of lines){
+        if(columns !== line.length){
+            setTimeout(() => {
+                node.style.color = "red";
+                node.textContent = "Niepoprawne dane";
+                komunikat.appendChild(node);
+            }, 2800);
+            return;
+        }
+        for(let i = 0; i < line.length-1; i++){
+            if(isNaN(line[i])){
+                setTimeout(() => {
+                    node.style.color = "red";
+                    node.textContent = "Niepoprawny typ danych";
+                    komunikat.appendChild(node);
+                }, 2800);
+                return;
+            }
+        }
+    }
+    inputs.style.display = "";
 
     for(let line of lines){
         let flag = false;
@@ -243,6 +277,14 @@ const showChart = () => {
 const testDiv = document.getElementById("testDiv");
 const submit = document.getElementById("sub");
 submit.addEventListener("click", ()=>{
+    if(!(data.length > 0)){
+        node.textContent = "Nie wczytano pliku!";
+        komunikat.appendChild(node);
+        setTimeout(() => {
+            komunikat.removeChild(node);
+        }, 1500);
+        return;
+    }
     showChart();
     k = Number.parseInt(kInput.value);
     p = Number.parseInt(pInput.value);
@@ -250,14 +292,47 @@ submit.addEventListener("click", ()=>{
 });
 
 const testb = document.getElementById("test");
+const classPoints = document.getElementById("classificationContent");
 testb.addEventListener("click", ()=>{
+    if(!(data.length > 0)){
+        node.textContent = "Nie wczytano pliku!";
+        komunikat.appendChild(node);
+        setTimeout(() => {
+            komunikat.removeChild(node);
+        }, 1500);
+        return;
+    }
     let l = 0;
+    const tableClass = document.createElement('table');
+    tableClass.className = "table";
+    k = Number.parseInt(kInput.value);
+    p = Number.parseInt(pInput.value);
     for(let po of points){
         l++;
         const fn = find_neighbors(po, test);
         const mv = majority_vote(fn);
+        const tr = document.createElement('tr');
+        let td = document.createElement('td');
+        td.appendChild(document.createTextNode(l));
+        tr.appendChild(td);
+
+        td = document.createElement('td');
+        td.appendChild(document.createTextNode(po));
+        tr.appendChild(td);
+
+        td = document.createElement('td');
+        td.appendChild(document.createTextNode(names[mv]));
+        tr.appendChild(td);
+        tableClass.appendChild(tr);
         console.log("Podany punkt o wspolrzednych x:"+po[c1]+" y:"+po[c2]+" nalezy do: "+names[mv]);
     }
+    classPoints.textContent = "";
+    const infoH = document.createElement('h3');
+    infoH.innerHTML = "Zklasyfikowane punkty";
+    const infoP = document.createElement('p');
+    infoP.appendChild(infoH);
+    classPoints.appendChild(infoP);
+    classPoints.appendChild(tableClass);
 });
 
 function distance(p1, p2) {
@@ -298,8 +373,8 @@ function majority_vote(ps) {
         }
     }
 
-    var max_votes = 0;
-    var winner = null;
+    let max_votes = 0;
+    let winner = null;
     for (var c = 0; c < names.length-1; c++) {
         if (votes.get(names[c]) === max_votes) {
             winner = null;
@@ -307,6 +382,9 @@ function majority_vote(ps) {
             max_votes = votes.get(names[c]);
             winner = c;
         }
+    }
+    if(winner === null){
+        
     }
     return winner;
 }

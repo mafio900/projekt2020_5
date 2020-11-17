@@ -51,6 +51,29 @@ app.on('ready', function(){
     ipcMain.on('point', (e, data)=>{
         mainWindow.webContents.send('point', data);
     });
+
+    ipcMain.on('showAddPoint', (e, data)=>{
+        addWindow = new BrowserWindow({
+            width: 600,
+            height: 400,
+            icon: __dirname + '/assets/icons/win/icon.ico',
+            webPreferences: {
+                nodeIntegration: true
+            },
+            parent: mainWindow
+        });
+        //Load html
+        addWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'inputPoints.html'),
+            protocol: 'file',
+            slashes: true
+        }));
+        //Quit when closed
+        addWindow.on('close', function () {
+            addWindow = null;
+        });
+        addWindow.setMenu(null);
+    });
 });
 
 //Create menu template
@@ -60,45 +83,19 @@ const mainMenuTemplate = [
         submenu:[
             {
                 label: 'Load data from file',
-                accelerator: process.platform == 'darwin' ? 'Command+Z' : 'Ctrl+Z',
+                accelerator: process.platform === 'darwin' ? 'Command+Z' : 'Ctrl+Z',
                 click(){
                     loadFile();
                 }
             },
             {
                 label: 'Quit',
-                accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+                accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
                 click(){
                     app.quit();
                 }
             }
         ]
-    },
-    {
-        label: 'Add point',
-        accelerator: process.platform == 'darwin' ? 'Command+A' : 'Ctrl+A',
-        click(){
-            addWindow = new BrowserWindow({
-                width: 600,
-                height: 400,
-                icon: __dirname + '/assets/icons/win/icon.ico',
-                webPreferences: {
-                    nodeIntegration: true
-                },
-                parent: mainWindow
-            });
-            //Load html
-            addWindow.loadURL(url.format({
-                pathname: path.join(__dirname, 'inputPoints.html'),
-                protocol: 'file',
-                slashes: true
-            }));
-            //Quit when closed
-            addWindow.on('close', function () {
-                addWindow = null;
-            });
-            addWindow.setMenu(null);
-        }
     }
 ];
 
@@ -109,7 +106,7 @@ if(process.env.NODE_ENV !== 'production'){
         submenu: [
             {
                 label: 'Toggle dev tools',
-                accelerator: process.platform == 'darwin' ? 'Command+D' : 'Ctrl+D',
+                accelerator: process.platform === 'darwin' ? 'Command+D' : 'Ctrl+D',
                 click(item, focusedWindow){
                     focusedWindow.toggleDevTools();
                 }
@@ -124,6 +121,9 @@ if(process.env.NODE_ENV !== 'production'){
 function loadFile() {
     //Show dialog window
     dialog.showOpenDialog(mainWindow, {
+        filters: [
+            { name: 'Programy tekstowe', extensions: ['txt', 'csv'] }
+            ],
         properties: ['openFile']
     }).then(result => {
         fs.readFile(result.filePaths[0], 'utf-8', (err, data) => {

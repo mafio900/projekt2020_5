@@ -5,6 +5,14 @@ let validationTables;
 
 let toSlice = [];
 splitValidation.addEventListener("click", ()=>{
+    if(!(data.length > 0)){
+        node.textContent = "Nie wczytano pliku!";
+        komunikat.appendChild(node);
+        setTimeout(() => {
+            komunikat.removeChild(node);
+        }, 1500);
+        return;
+    }
     toSlice = [];
     for (let i = 0; i < data.length; i++) {
         toSlice[i] = [];
@@ -23,9 +31,11 @@ function split(arr, parts) {
     let l = [];
     let r = [];
     for (let i = 0; i < arr.length; i++){
-        l[i] = arr[i].length / parts;
+        l[i] = Math.floor(arr[i].length / parts);
         r[i] = arr[i].length % parts;
     }
+    console.log(l);
+    console.log(r);
 
     for(let k = 0; k < parts; k++){
         vT[k] = [];
@@ -44,6 +54,7 @@ function split(arr, parts) {
             arr[i].splice(0,1);
         }
     }
+    console.log(vT);
     return vT;
 }
 
@@ -123,7 +134,7 @@ function knn10(arr) {
         wal.appendChild(div1);
     }
     const hh = document.createElement('h3');
-    hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s/arr.length)*100).toPrecision(4).toString() + "%";
+    hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s/arr.length)*100).toPrecision(5).toString() + "%";
     wal.appendChild(hh);
 }
 
