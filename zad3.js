@@ -84,6 +84,8 @@ splitFile.addEventListener("click", () => {
 
 const dataText = document.getElementById("dataText");
 calculate.addEventListener("click", () => {
+    k = Number.parseInt(kInput.value);
+    p = Number.parseInt(pInput.value);
     addLearnTable();
     addTestingTable();
 });
@@ -101,8 +103,6 @@ function addTestingTable() {
     for (let [i, po] of testujacy.entries()) {
         const fn = find_neighbors(po, uczacy);
         const mv = majority_vote(fn);
-
-        //console.log("Podany punkt o wspolrzednych: " + po + " nalezy do: " + names[mv]);
 
         //tworzymy wiersze
         var tr = document.createElement('tr');

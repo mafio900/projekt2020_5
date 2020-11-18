@@ -16,8 +16,8 @@ let zad3Menu;
 app.on('ready', function(){
     //Create new window
     mainWindow = new BrowserWindow({
-        width: 1280,
-        height: 800,
+        minWidth: 1100,
+        minHeight: 900,
         icon: __dirname + '/assets/icons/win/icon.ico',
         webPreferences: {
             nodeIntegration: true

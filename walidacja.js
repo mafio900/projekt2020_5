@@ -13,6 +13,8 @@ splitValidation.addEventListener("click", ()=>{
         }, 1500);
         return;
     }
+    k = Number.parseInt(kInput.value);
+    p = Number.parseInt(pInput.value);
     toSlice = [];
     for (let i = 0; i < data.length; i++) {
         toSlice[i] = [];
@@ -34,8 +36,6 @@ function split(arr, parts) {
         l[i] = Math.floor(arr[i].length / parts);
         r[i] = arr[i].length % parts;
     }
-    console.log(l);
-    console.log(r);
 
     for(let k = 0; k < parts; k++){
         vT[k] = [];
@@ -54,7 +54,6 @@ function split(arr, parts) {
             arr[i].splice(0,1);
         }
     }
-    console.log(vT);
     return vT;
 }
 
@@ -87,7 +86,6 @@ function knn10(arr) {
             for (let j = 0; j < arr[m][i].length; j++) {
                 const fn = find_neighbors2(arr[m][i][j], t);
                 const mv = majority_vote(fn);
-                //console.log("Podany punkt o wspolrzednych: " + arr[m][i][j] + " nalezy do: " + names[mv]);
                 //tworzymy wiersze
                 var tr = document.createElement('tr');
 

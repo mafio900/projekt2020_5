@@ -2,6 +2,3 @@
 node_modules
 release-builds
 package-lock.json
-package.json
-*.json
-package.json

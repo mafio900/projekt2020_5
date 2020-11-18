@@ -262,3 +262,10 @@ input[type=number] {
     display: none;
     padding: 6px 12px;
 }
+
+.hideText{
+    display: none;
+}
+.classClick{
+    cursor: pointer;
+}
