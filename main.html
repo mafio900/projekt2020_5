@@ -28,9 +28,13 @@
                 <p></p>
                 <button id="sub" class="submit" type="submit">Rysuj wykres</button>
                 <button style="margin-top: 10px" id="addPointButton" class="submit">Dodaj punkt do wykresu</button>
+                <button id="test" class="submit">Klasyfikuj dodane punkty</button>
                 <div id="testDiv">
                     <button id="test" class="submit">Klasyfikuj dodane punkty</button>
                 </div>
+
+                <button id="boundaries" class="submit">Rusuj granice</button>
+
             </div>
             <div id="zad3Buttons" class="tabcontent">
                 <input id="splitInput" type="number" placeholder="Wielkość zbioru uczącego" />
@@ -48,11 +52,20 @@
                 <button class="tablinks" onclick="changeTab(event, 'walidacja')">Dziesięciokrotna walidacja</button>
             </div>
             <div id="char" class="tabcontent">
+                <div id="myProgress" style="display:none">
+                    <div id="loading">0%</div>
+                </div>
                 <div id="selectCol1"></div>
                 <div id="selectCol2"></div>
+
+                Pokaż numery:
+                <input type="checkbox" id="showNumbers"/>
                 <div id="classificationContent"></div>
                 <div class="chart-container">
                     <canvas id="wykres" width="400" height="400"></canvas>
+                </div>
+                <div class="chart2">
+                    <canvas id="wykres2" width="400" height="400"></canvas>
                 </div>
             </div>
             <div id="zad3" class="tabcontent">

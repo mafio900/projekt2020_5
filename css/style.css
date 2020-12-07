@@ -1,4 +1,20 @@
+#loading {
+  width: 10%;
+  height: 30px;
+  background-color: #4CAF50;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
 
+#wykres2{
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    transform: scale(1, -1);
+    filter: FlipV;
+    float: left;
+}
 *{
     font-family: "Trebuchet MS", Helvetica, sans-serif !important;
 }
@@ -15,9 +31,10 @@
 }
 
 .chart-container , #wykres {
-    height:45vh;
     width:45vw;
     margin: auto;
+    position: absolute;
+    float: left;
 }
 
 
@@ -176,7 +193,7 @@ input[type=number] {
 /*  zad3 html  */
 
 #inputs {
-    
+
     text-align: center;
 }
 
@@ -198,7 +215,7 @@ input[type=number] {
     margin-bottom: auto;
     margin-top: 14px;
     text-align: center;
-    
+
     display: flex;
 }
 

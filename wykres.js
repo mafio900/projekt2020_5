@@ -3,6 +3,7 @@ let kInput = document.getElementById("k");
 let p;
 let k;
 const nazwaTwoichPunktow = 'Twoje punkty';
+let dataSets_boundaries = [];
 
 let komunikat = document.getElementById("komunikat");
 let node = document.createElement("p");
@@ -243,6 +244,8 @@ const showChart = () => {
         });
     });
 
+    dataSets_boundaries = dataSets;
+
     //wykres
     const canvas = document.getElementById("wykres");
     const ctx = canvas.getContext('2d');
@@ -470,3 +473,168 @@ jQuery('.quantity').each(function () {
 
 });
 // koniec przyciski p i k
+
+//eldo - granice
+
+const bound = document.getElementById("boundaries");
+bound.addEventListener("click", ()=>{
+    const prevChart = document.getElementById('wykres');
+    prevChart.style.display = "none";
+    const canv = document.getElementById('wykres2');
+    const showNumbersCheckbox = document.getElementById('showNumbers');
+    const showNumbers = showNumbersCheckbox.checked;
+    canv.width = 500;
+    canv.height = 500;
+    const ctxv = canv.getContext('2d');
+
+    ctxv.clearRect(0, 0, canv.width, canv.height);
+
+    const pointSize = 10;
+    let areaPadding = 10;
+
+    let pointies = [];
+
+    let areaLoading = 0;
+    let areaLengthLoading = 0;
+
+    let minx=0;
+    let miny=0;
+    let maxx=0;
+    let maxy=0;
+
+    dataSets_boundaries.forEach((d, c)=>{
+        d.data.forEach((coord, k) => {
+            if(coord.x < minx)
+                minx = coord.x;
+            if(coord.y < miny)
+                miny = coord.y;
+            if(coord.x > maxx)
+                maxx = coord.x;
+            if(coord.y > maxy)
+                maxy = coord.y;
+
+            pointies.push([coord,c]);
+        });
+    });
+
+
+    let wdth = canv.width/(maxx - minx)-2;
+    let hght = canv.height/(maxy - miny)-2;
+
+    if(wdth<hght)
+        hght = wdth;
+    else
+        wdth = hght;
+
+    let px, py = 0;
+
+//  if(minx<miny)
+        px = (-1)*minx+2;
+//  else
+        py = (-1)*miny+2;
+
+//   px = py;
+
+    if(areaPadding < px)
+        areaPadding = areaPadding + px/2;
+
+
+    let area = [];
+
+    for (let x = minx-areaPadding; x <= maxx+areaPadding; x+=0.1)
+        for (let y = miny-areaPadding; y <= maxy+areaPadding; y= y+=0.1)
+            area.push([x,y]);
+
+    areaLengthLoading = area.length;
+    areaLengthLoading = parseInt(areaLengthLoading/100)
+
+    let tmp_loading = 0;
+
+    for(let po of area){
+        const fn = find_neighbors(po, test);
+        const mv = majority_vote(fn);
+
+        if (mv !== null) {
+            ctxv.globalAlpha = 0.4;
+            ctxv.fillStyle = colorsBackground[mv];
+            ctxv.fillRect(
+                (po[0] + px) * wdth,
+                (po[1] + py) * hght,
+                wdth/10, hght/10);
+        }
+
+    // progress couter
+
+        areaLoading++;
+        if(areaLoading%areaLengthLoading == 0 )
+            console.log("wczytano: " + areaLoading + " z " + areaLengthLoading + " |" + parseInt(areaLoading/areaLengthLoading)+"%");
+    }
+
+
+    pointies.forEach((p, i) => {
+
+        ctxv.globalAlpha = 1.0;
+        ctxv.fillStyle = colorsBackground[p[1]];
+        ctxv.beginPath();
+        ctxv.arc(
+                (p[0].x + px) * wdth ,
+                (p[0].y + py) * hght ,
+                pointSize/2,
+                0,
+                2 * Math.PI);
+                ctxv.fill();
+    });
+
+//kreska X
+    ctxv.globalAlpha = 1.0;
+    ctxv.fillStyle = "black";
+    ctxv.fillRect(
+            0,
+            py * hght-1,
+            10000,
+            2);
+
+//liczby Y
+    if(showNumbers)
+    for(let wy = maxy+areaPadding; wy>=miny-areaPadding; wy--){
+        ctxv.save();
+        ctxv.scale(1, -1);
+        ctxv.fillText(""+wy, py*hght+hght/2, -1*(wy+py)*hght+4);
+        ctxv.restore();
+    }
+
+//podzial X
+    for(let wy = miny-areaPadding; wy<=maxy+areaPadding; wy++){
+        ctxv.fillRect(
+            (wy+py) * hght + pointSize/2 - 1 -6 ,
+            py * hght - 6,
+            2,
+            12);
+    }
+
+//kreska Y
+    ctxv.globalAlpha = 1.0;
+    ctxv.fillStyle = "black";
+    ctxv.fillRect(
+            px * wdth-1,
+            0,
+            2,
+            10000);
+//liczby x
+    for(let wx = minx-areaPadding*2; wx<=maxx+areaPadding*2; wx++){
+        if(showNumbers){
+            ctxv.font = "10px Arial";
+            ctxv.save();
+            ctxv.scale(1, -1);
+            ctxv.fillText(""+wx, (wx+px)*wdth-4, -px*wdth+wdth/2+40);
+            ctxv.restore();
+        }
+
+//podział Y
+        ctxv.fillRect(
+            px * wdth - 6,
+            (wx+px)*wdth+pointSize/2 - 1 -6,
+            12,
+            2);
+    }
+});
