@@ -187,16 +187,13 @@ function processData(allText) {
 }
 
 //tworzenie tabeli z wybranymi kolumnami do wyświetlenia po wciśnięciu przycisku
-
-let licznik = false;
-let myChart;
 let c1;
 let c2;
 const showChart = () => {
-    if (licznik) {
-        myChart.destroy();
-    }
-    licznik = true;
+    //wykres
+    const canvas = document.getElementById("wykres");
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     const dataSet = [];
     const col1 = document.getElementsByName('opinion1-scale');
     const col2 = document.getElementsByName('opinion2-scale');
@@ -245,51 +242,7 @@ const showChart = () => {
     });
 
     dataSets_boundaries = dataSets;
-
-    //wykres
-    const canvas = document.getElementById("wykres");
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    myChart = new Chart(ctx, {
-        type: 'scatter',
-        data: {
-            datasets: dataSets
-        },
-        options: {
-            legend: {
-                display: true,
-                position: 'top',
-                labels: {
-                    padding: 10
-                }
-            },
-            scales: {
-                xAxes: [{
-                    type: 'linear',
-                    position: 'bottom'
-                }]
-            }
-        }
-    });
 };
-
-
-const testDiv = document.getElementById("testDiv");
-const submit = document.getElementById("sub");
-submit.addEventListener("click", () => {
-    if (!(data.length > 0)) {
-        node.textContent = "Nie wczytano pliku!";
-        komunikat.appendChild(node);
-        setTimeout(() => {
-            komunikat.removeChild(node);
-        }, 1500);
-        return;
-    }
-    showChart();
-    k = Number.parseInt(kInput.value);
-    p = Number.parseInt(pInput.value);
-    testDiv.style.display = "";
-});
 
 const testb = document.getElementById("test");
 const classPoints = document.getElementById("classificationContent");
@@ -315,9 +268,7 @@ testb.addEventListener("click", () => {
         const mv = majority_vote(fn);
         const neighborsTable = [];
         for(let i = 0; i < fn.length; i++){
-            if(fn[i][1] === mv){
-                neighborsTable.push(fn[i][0]);
-            }
+            neighborsTable.push(fn[i][0]);
         }
 
         const tr = document.createElement('tr');
@@ -333,9 +284,13 @@ testb.addEventListener("click", () => {
         const neighborsText = document.createElement('p');
         neighborsText.id = l.toString() + "n";
         neighborsText.className = "hideText";
-        neighborsTable.forEach((neigh)=>{
+        fn.forEach(neigh => {
             const neighborText = document.createElement("p");
-            neighborText.textContent = neigh;
+            if(neigh[1] == mv){
+                neighborText.textContent = neigh + "*";
+            }else{
+                neighborText.textContent = neigh;
+            }
             neighborsText.appendChild(neighborText);
         });
         divPoint.appendChild(neighborsText);
@@ -478,6 +433,19 @@ jQuery('.quantity').each(function () {
 
 const bound = document.getElementById("boundaries");
 bound.addEventListener("click", ()=>{
+    if (!(data.length > 0)) {
+        node.textContent = "Nie wczytano pliku!";
+        komunikat.appendChild(node);
+        setTimeout(() => {
+            komunikat.removeChild(node);
+        }, 1500);
+        return;
+    }
+    showChart();
+    k = Number.parseInt(kInput.value);
+    p = Number.parseInt(pInput.value);
+    testDiv.style.display = "";
+
     const prevChart = document.getElementById('wykres');
     prevChart.style.display = "none";
     const canv = document.getElementById('wykres2');
