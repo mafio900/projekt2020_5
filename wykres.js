@@ -266,10 +266,6 @@ testb.addEventListener("click", () => {
     for (let po of points) {
         const fn = find_neighbors(po, test);
         const mv = majority_vote(fn);
-        const neighborsTable = [];
-        for(let i = 0; i < fn.length; i++){
-            neighborsTable.push(fn[i][0]);
-        }
 
         const tr = document.createElement('tr');
         let td = document.createElement('td');

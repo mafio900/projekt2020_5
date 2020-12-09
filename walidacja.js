@@ -4,8 +4,8 @@ const splitValidation = document.getElementById("splitValidation");
 let validationTables;
 
 let toSlice = [];
-splitValidation.addEventListener("click", ()=>{
-    if(!(data.length > 0)){
+splitValidation.addEventListener("click", () => {
+    if (!(data.length > 0)) {
         node.textContent = "Nie wczytano pliku!";
         komunikat.appendChild(node);
         setTimeout(() => {
@@ -32,26 +32,26 @@ function split(arr, parts) {
     let vT = [];
     let l = [];
     let r = [];
-    for (let i = 0; i < arr.length; i++){
+    for (let i = 0; i < arr.length; i++) {
         l[i] = Math.floor(arr[i].length / parts);
         r[i] = arr[i].length % parts;
     }
 
-    for(let k = 0; k < parts; k++){
+    for (let k = 0; k < parts; k++) {
         vT[k] = [];
     }
 
     for (let i = 0; i < arr.length; i++) {
         let lol = 0;
-        while(arr[i].length && lol < parts) {
-            vT[lol++].push(arr[i].splice(0,l[i]));
+        while (arr[i].length && lol < parts) {
+            vT[lol++].push(arr[i].splice(0, l[i]));
         }
     }
 
-    for(let i = 0; i < arr.length; i++){
-        for(let m = r[i]-1; m >= 0; m--){
+    for (let i = 0; i < arr.length; i++) {
+        for (let m = r[i] - 1; m >= 0; m--) {
             vT[m][i].push(arr[i][0]);
-            arr[i].splice(0,1);
+            arr[i].splice(0, 1);
         }
     }
     return vT;
@@ -63,19 +63,19 @@ function knn10(arr) {
     const wal = document.getElementById('wal');
     wal.textContent = "";
     let s = 0;
-    for(let m = 0; m < arr.length; m++) {
+    for (let m = 0; m < arr.length; m++) {
         let t = [];
-        for(let o = 0; o < arr.length; o++){
-            if(m!==o)
+        for (let o = 0; o < arr.length; o++) {
+            if (m !== o)
                 t.push(arr[o]);
         }
 
-        var div1 = document.createElement('div');
+        const div1 = document.createElement('div');
         div1.className = "section-table-1";
-        var h = document.createElement('h3');
-        h.innerHTML = "Tabela nr: " + (m+1);
+        const h = document.createElement('h3');
+        h.innerHTML = "Tabela nr: " + (m + 1);
         div1.appendChild(h);
-        var table = document.createElement('table');
+        const table = document.createElement('table');
         table.className = "table";
         let classificationPercent = 0;
 
@@ -87,17 +87,34 @@ function knn10(arr) {
                 const fn = find_neighbors2(arr[m][i][j], t);
                 const mv = majority_vote(fn);
                 //tworzymy wiersze
-                var tr = document.createElement('tr');
+                const tr = document.createElement('tr');
 
-                var td = document.createElement('td');
+                let td = document.createElement('td');
                 td.appendChild(document.createTextNode(++iksde));
                 tr.appendChild(td);
 
-                var td = document.createElement('td');
-                td.appendChild(document.createTextNode(arr[m][i][j]));
+                td = document.createElement('td');
+                const divPoint = document.createElement('div');
+                divPoint.appendChild(document.createTextNode(arr[m][i][j]));
+                divPoint.id = iksde.toString() + m;
+                divPoint.className = "classClickk";
+                const neighborsText = document.createElement('p');
+                neighborsText.id = divPoint.id + "n";
+                neighborsText.className = "hideText";
+                fn.forEach(neigh => {
+                    const neighborText = document.createElement("p");
+                    if (neigh[1] == mv) {
+                        neighborText.textContent = neigh + "*";
+                    } else {
+                        neighborText.textContent = neigh;
+                    }
+                    neighborsText.appendChild(neighborText);
+                });
+                divPoint.appendChild(neighborsText);
+                td.appendChild(divPoint);
                 tr.appendChild(td);
 
-                var td = document.createElement('td');
+                td = document.createElement('td');
                 td.appendChild(document.createTextNode(names[mv]));
                 tr.appendChild(td);
 
@@ -123,16 +140,27 @@ function knn10(arr) {
         }
         const classificationTr = document.createElement('tr');
         const classificationTd = document.createElement('td');
-        s += classificationPercent/sum;
-        classificationTd.textContent = "Dokładność klasyfikacji wynosi: " + ((classificationPercent/sum)*100).toPrecision(4).toString() + "%";
+        s += classificationPercent / sum;
+        classificationTd.textContent = "Dokładność klasyfikacji wynosi: " + ((classificationPercent / sum) * 100).toPrecision(4).toString() + "%";
         classificationTd.colSpan = 3;
         classificationTr.appendChild(classificationTd);
         table.appendChild(classificationTr);
         div1.appendChild(table);
         wal.appendChild(div1);
     }
+    const els = document.getElementsByClassName("classClickk");
+        Array.from(els).forEach((el) => {
+            el.addEventListener("click", () => {
+                const neighbor = document.getElementById(el.id.toString() + "n");
+                if (neighbor.className === "hideText") {
+                    neighbor.className = "";
+                } else {
+                    neighbor.className = "hideText";
+                }
+            });
+        });
     const hh = document.createElement('h3');
-    hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s/arr.length)*100).toPrecision(5).toString() + "%";
+    hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s / arr.length) * 100).toPrecision(5).toString() + "%";
     wal.appendChild(hh);
 }
 
@@ -146,7 +174,7 @@ function find_neighbors2(point, tt) {
             }
         }
     }
-    dists.sort(function(a, b) { return a[0] - b[0]});
+    dists.sort(function (a, b) { return a[0] - b[0] });
     const neighbors = [];
     for (let i = 0; i < k && i < dists.length; i++) {
         neighbors.push(dists[i][1]);
