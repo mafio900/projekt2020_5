@@ -62,6 +62,8 @@ function knn10(arr) {
     p = Number.parseInt(pInput.value);
     const wal = document.getElementById('wal');
     wal.textContent = "";
+    const hh = document.createElement('h3');
+    wal.appendChild(hh);
     let s = 0;
     for (let m = 0; m < arr.length; m++) {
         let t = [];
@@ -103,10 +105,26 @@ function knn10(arr) {
                 neighborsText.className = "hideText";
                 fn.forEach(neigh => {
                     const neighborText = document.createElement("p");
+                    let przesuniecie = [];
+                    let odleglosc = 0;
                     if (neigh[1] == mv) {
-                        neighborText.textContent = neigh + "*";
+                        for(let iii = 0; iii<neigh.length; iii++){
+                            przesuniecie.push(Number.parseFloat(arr[m][i][j]) - Number.parseFloat(neigh[0][iii]));
+                        }
+                        przesuniecie.forEach(prz => {
+                            odleglosc += prz * prz;
+                        });
+                        odleglosc = Math.sqrt(odleglosc);
+                        neighborText.textContent = neigh[0] + "*" + "Odległość: " + odleglosc.toPrecision(4).toString();
                     } else {
-                        neighborText.textContent = neigh;
+                        for(let iii = 0; iii<neigh.length; iii++){
+                            przesuniecie.push(Number.parseFloat(arr[m][i][j]) - Number.parseFloat(neigh[0][iii]));
+                        }
+                        przesuniecie.forEach(prz => {
+                            odleglosc += prz * prz;
+                        });
+                        odleglosc = Math.sqrt(odleglosc);
+                        neighborText.textContent = neigh[0] + "Odległość: " + odleglosc.toPrecision(4).toString();
                     }
                     neighborsText.appendChild(neighborText);
                 });
@@ -159,9 +177,8 @@ function knn10(arr) {
                 }
             });
         });
-    const hh = document.createElement('h3');
-    hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s / arr.length) * 100).toPrecision(5).toString() + "%";
-    wal.appendChild(hh);
+        hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s / arr.length) * 100).toPrecision(4).toString() + "%";
+        
 }
 
 function find_neighbors2(point, tt) {

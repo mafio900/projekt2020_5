@@ -1,0 +1,23 @@
+.submit{
+    cursor: pointer;
+    margin-top: 5px;
+    border-left: 1px solid #eee;
+    width: 30%;
+    height: 50px;
+    display: inline;
+    text-align: center;
+    background-color: #00d1b2;
+    color: #fefefe;
+    font-size: 16px;
+    line-height: 2;
+}
+
+.pointInputs{
+    margin-top: 5px;
+    width: 30%;
+    height: 45px;
+    display: inline;
+    text-align: center;
+    font-size: 16px;
+    line-height: 2;
+}

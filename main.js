@@ -16,13 +16,15 @@ let zad3Menu;
 app.on('ready', function(){
     //Create new window
     mainWindow = new BrowserWindow({
-        minWidth: 1100,
+        minWidth: 1200,
         minHeight: 900,
         icon: __dirname + '/assets/icons/win/icon.ico',
         webPreferences: {
             nodeIntegration: true
         }
     });
+
+
     //Load html
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'main.html'),
@@ -62,6 +64,7 @@ app.on('ready', function(){
             },
             parent: mainWindow
         });
+        addWindow.resizable = false;
         //Load html
         addWindow.loadURL(url.format({
             pathname: path.join(__dirname, 'inputPoints.html'),
@@ -72,7 +75,7 @@ app.on('ready', function(){
         addWindow.on('close', function () {
             addWindow = null;
         });
-        addWindow.setMenu(null);
+        //addWindow.setMenu(null);
     });
 });
 

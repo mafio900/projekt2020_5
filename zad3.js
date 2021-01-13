@@ -40,7 +40,7 @@ splitFile.addEventListener("click", () => {
         calculate.style.display = "none";
         return;
     }
-    calculate.style.display = "";
+    //calculate.style.display = "";
     for(let [i,ts] of toSlice.entries()){
         uczacy[i] = [];
     }
@@ -80,6 +80,10 @@ splitFile.addEventListener("click", () => {
     setTimeout(() => {
         komunikat.removeChild(node);
     }, 2500);
+    k = Number.parseInt(kInput.value);
+    p = Number.parseInt(pInput.value);
+    addLearnTable();
+    addTestingTable();
 });
 
 const dataText = document.getElementById("dataText");

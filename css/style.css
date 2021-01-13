@@ -1,62 +1,76 @@
-#loading {
-  width: 10%;
-  height: 30px;
-  background-color: #4CAF50;
-  text-align: center;
-  line-height: 30px;
-  color: white;
-}
 
-#wykres2{
-    -moz-transform: scale(1, -1);
-    -webkit-transform: scale(1, -1);
-    -o-transform: scale(1, -1);
-    transform: scale(1, -1);
-    filter: FlipV;
-    float: left;
-}
-*{
-    font-family: "Trebuchet MS", Helvetica, sans-serif !important;
-}
 
-/*  main html  */
-
-.addKP {
-    font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+body{
+    margin: 0;
+    margin-left: 300px;
     text-align: center;
-    width: 250px;
-    padding-bottom: 40%;
-    border-right: 1px solid gray;
+    vertical-align: middle;
+}
+
+.submit{
+    cursor: pointer;
+    margin-top: 5px;
+    border-left: 1px solid #eee;
+    width: 222px;
+    height: 50px;
+    display: inline;
+    text-align: center;
+    background-color: #00d1b2;
+    color: #fefefe;
+    font-size: 16px;
+    line-height: 2;
+}
+
+#splitInput{
+width: 180px;
+margin-top: 15px;
+margin-left: 15%;
+margin-bottom: 10%;
+}
+
+#inputs{
+    height: 100%;
+    margin-left: -300px;
+    width: 300px;
+    background-color: #fafafa;
+    float: left;
     position: fixed;
+    box-shadow: 2px 0px 10px grey;
+}
+#komunikat{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    color: red;
+    font-weight: bold;
 }
 
-.chart-container , #wykres {
-    width:45vw;
-    margin: auto;
-    position: absolute;
-    float: left;
+#komunikat>.info{
+    font-size: 20px;
+    display: -ms-flexbox;
+   display: -webkit-flex;
+   display: flex;
+   -ms-flex-align: center;
+   -webkit-align-items: center;
+   -webkit-box-align: center;
+   align-items: center;
 }
 
-
-#selectCol1>p {
-    margin: auto;
-    text-align: center;
-}
-
+/* p i k*/
 /* dodawanie p i k */
 
-.quantity {
-    clear: both;
-    width: 180px;
-    text-align: center;
+.quantity{
+    display: table-cell;
+    font-weight: bold;
 }
 
-#k,#p, .quantity-up {
-    margin-left: 30%;
-    margin-top: 10px;
+#k,#p, .quantity-nav {
+    margin-top: 5%;
 }
-.quantity-down {
-    margin-bottom: -10px;
+
+#k,#p {
+        margin-left: 27%;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -71,12 +85,11 @@ input[type=number] {
 
 .quantity>input {
     color: #00d1b2;
-    width: 60px;
+    font-weight: bold;
     height: 42px;
     line-height: 1.65;
     float: left;
     padding: 0;
-    margin: 0;
     padding-left: 20px;
     border: 1px solid #eee;
 }
@@ -109,19 +122,6 @@ input[type=number] {
     user-select: none;
 }
 
-.submit{
-    cursor: pointer;
-    border-left: 1px solid #eee;
-    width: 222px;
-    height: 50px;
-    display: inline;
-    text-align: center;
-    background-color: #00d1b2;
-    color: #fefefe;
-    font-size: 16px;
-    line-height: 2;
-}
-
 .quantity-button.quantity-up {
     position: absolute;
     height: 50%;
@@ -133,6 +133,61 @@ input[type=number] {
     position: absolute;
     bottom: -1px;
     height: 50%;
+}
+
+/*koniec K i P*/
+
+
+.tab {
+    width: 101%;
+    overflow: hidden;
+    box-shadow: 0px 2px 10px grey;
+    background-color: #fafafa;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    color: #444;
+    width: 33%;
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 20px 20px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #00d1b2;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #00d1b2;
+}
+
+.tabcontent {
+    display: none;
+    margin-top: 10%;
+}
+
+.hideText{
+    display: none;
+}
+.classClick{
+    cursor: pointer;
+}
+
+/*tabele*/
+
+table{
+    width: 100%;
+}
+table>tr{
+    height: 40px;
 }
 
 /* wybor kolum do wyswietlenia*/
@@ -189,104 +244,36 @@ input[type=number] {
     width: 2%;
 }
 
-
-/*  zad3 html  */
-
-#inputs {
-
-    text-align: center;
+#char{
+    margin-top: 10px !important;
 }
 
-#sub, #test {
-    margin-top: 10px;
+#wykres{
+    width: 500px;
 }
 
-#inputs>#splitInput {
-    width: 200px;
-    height: 42px;
-    margin: auto;
-    font-size: 16px;
-    text-align: center;
-    color: #222;
-    margin-top: 15px;
+#wykres2{
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    transform: scale(1, -1);
+    filter: FlipV;
+    box-shadow: 0px 0px 5px #ebebeb;
 }
 
-#dataText {
-    margin-bottom: auto;
-    margin-top: 14px;
-    text-align: center;
-
-    display: flex;
-}
-
-#dataText>p {
-    height: 10px;
-    padding: 0;
-    margin: 0;
-}
-
-#komunikat {
-    text-align: center;
-    margin: 14px;
-    color: green;
-    font-size: 18px;
-}
-/* dla k i p z zad 3 */
-#k_zad3,#p_zad3 {
-    margin-left: 30%;
-    margin-top: 10px;
-}
-
-/* dla przycisków */
-#splitFile, #calculate, #walidacjaOblicz{
-    margin-top: 10px;
-}
-/* style dla tabelki lewej w zad 3 */
-.section-table-2{
-    margin-left: 10%;
-}
-
-
-.tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-}
-
-/* Style the buttons inside the tab */
-.tab button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
+#infoo{
+    position: fixed;
+    margin-left: 400px;
+    margin-top: 350px;
+    display: block;
+    color: #00d1b2;
+    font-size: xx-large;
+    font-family: sans-serif;
+    font-weight: bolder;
+    background-color: #eeeeee;
+    padding: 27px;
+    border-radius: 23px;
+    border-bottom: outset;
     cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    font-size: 17px;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #ddd;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-    background-color: #ccc;
-}
-
-.tabcontent {
-    display: none;
-    padding: 6px 12px;
-}
-
-.hideText{
-    display: none;
-}
-.classClick{
-    cursor: pointer;
-}
-
-.classClickk{
-    cursor: pointer;
+    opacity: 0.8;
 }

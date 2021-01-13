@@ -4,7 +4,6 @@
 <head>
     <title>Wykres projektowanie</title>
     <link rel="stylesheet" type="text/css" title="Cool stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
     <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.min.js"></script>
     <script src="jquery.min.js"></script>
@@ -13,32 +12,36 @@
 </head>
 
 <body>
+    <div id="infoo" style="display: none">
+        wczytaj plik </div>
     <div class="row">
         <div id="inputs" class="addKP col-3" >
             <div id="komunikat"></div>
             <div class="quantity">
-                Podaj liczbę sąsiadów k:
+                Liczba sąsiadów <font style='color: #00d1b2;font-size: 18px'>K</font>:
                 <input type="number" min="1" max="999" value="1" id="k">
             </div>
             <div class="quantity">
-                Podaj odległosć p:
+                Odległosć <font style='color: #00d1b2;font-size: 18px'>P</font>:
                 <input type="number" min="1" max="999" value="1" id="p">
             </div>
             <div id="charButtons" class="tabcontent">
                 <p></p>
                 <button id="boundaries" class="submit">Rysuj granice</button>
-                <button style="margin-top: 10px" id="addPointButton" class="submit">Dodaj punkt do wykresu</button>
+                <button id="addPointButton" class="submit">Dodaj punkt do wykresu</button>
                 <div id="testDiv">
                     <button id="test" class="submit">Klasyfikuj dodane punkty</button>
                 </div>
 
-                
+
 
             </div>
             <div id="zad3Buttons" class="tabcontent">
-                <input id="splitInput" type="number" placeholder="Wielkość zbioru uczącego" />
-                <button id="splitFile" class="submit">Podziel plik</button><br/>
-                <button style="display: none" id="calculate" class="submit">Oblicz</button>
+                <div class="quantity">
+                    Wielkość zbioru uczącego:
+                    <input id="splitInput" type="number" min="1" max="9999" value="10">
+                </div>
+                <button id="splitFile" class="submit">Podziel plik i oblicz</button><br/>
             </div>
             <div id="walidacjaButtons" class="tabcontent">
                 <button id="splitValidation" class="submit">Podziel</button>

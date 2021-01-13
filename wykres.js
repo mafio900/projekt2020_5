@@ -266,6 +266,8 @@ testb.addEventListener("click", () => {
     for (let po of points) {
         const fn = find_neighbors(po, test);
         const mv = majority_vote(fn);
+        console.log(fn);
+        console.log(mv);
 
         const tr = document.createElement('tr');
         let td = document.createElement('td');
@@ -282,10 +284,26 @@ testb.addEventListener("click", () => {
         neighborsText.className = "hideText";
         fn.forEach(neigh => {
             const neighborText = document.createElement("p");
+            let przesuniecie = [];
+            let odleglosc = 0;
             if(neigh[1] == mv){
-                neighborText.textContent = neigh[0] + "*";
+                for(let i = 0; i<neigh.length; i++){
+                    przesuniecie.push(Number.parseFloat(po[i]) - Number.parseFloat(neigh[0][i]));
+                }
+                przesuniecie.forEach(prz => {
+                    odleglosc += prz * prz;
+                });
+                odleglosc = Math.sqrt(odleglosc);
+                neighborText.textContent = neigh[0] + "*" + "Odległość: " + odleglosc.toPrecision(4).toString();
             }else{
-                neighborText.textContent = neigh[0];
+                for(let i = 0; i<neigh.length; i++){
+                    przesuniecie.push(Number.parseFloat(po[i]) - Number.parseFloat(neigh[0][i]));
+                }
+                przesuniecie.forEach(prz => {
+                    odleglosc += prz * prz;
+                });
+                odleglosc = Math.sqrt(odleglosc);
+                neighborText.textContent = neigh[0] + "Odległość: " + odleglosc.toPrecision(4).toString();
             }
             neighborsText.appendChild(neighborText);
         });
@@ -519,7 +537,7 @@ bound.addEventListener("click", ()=>{
         const mv = majority_vote(fn);
 
         if (mv !== null) {
-            ctxv.globalAlpha = 0.4;
+            ctxv.globalAlpha = 0.8;
             ctxv.fillStyle = colorsBackground[mv];
             ctxv.fillRect(
                 (po[0] + px) * wdth,
