@@ -283,9 +283,9 @@ testb.addEventListener("click", () => {
         fn.forEach(neigh => {
             const neighborText = document.createElement("p");
             if(neigh[1] == mv){
-                neighborText.textContent = neigh + "*";
+                neighborText.textContent = neigh[0] + "*";
             }else{
-                neighborText.textContent = neigh;
+                neighborText.textContent = neigh[0];
             }
             neighborsText.appendChild(neighborText);
         });
@@ -301,7 +301,7 @@ testb.addEventListener("click", () => {
 
     classPoints.textContent = "";
     const infoH = document.createElement('h3');
-    infoH.innerHTML = "Zklasyfikowane punkty";
+    infoH.innerHTML = "Sklasyfikowane punkty";
     const infoP = document.createElement('p');
     infoP.appendChild(infoH);
     classPoints.appendChild(infoP);

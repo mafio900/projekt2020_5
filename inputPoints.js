@@ -23,7 +23,7 @@ ipcRenderer.on('data', (event, data) => {
     let dataToSend = [];
     addPointButton.addEventListener('click', ()=>{
         for(let i = 0; i < lines; i++){
-            dataToSend.push(Number.parseInt(document.getElementById(i.toString()).value));
+            dataToSend.push(Number.parseFloat(document.getElementById(i.toString()).value));
         }
         ipcRenderer.send('point', dataToSend);
         remote.getCurrentWindow().close();
