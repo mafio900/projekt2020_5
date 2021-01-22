@@ -61,6 +61,7 @@ let data = [];
 
 function processData(allText) {
     let inputs = document.getElementById("inputs");
+    console.log(allText);
 
     let lines = [];
     data = [];
@@ -73,10 +74,14 @@ function processData(allText) {
     let allTextLines = allText.split(/\r\n|\n/);
 
     for (let i = 0; i < allTextLines.length; i++) {
+        if(allTextLines[i] == ""){
+            continue;
+        }
         lines.push(allTextLines[i].split(','));
     }
 
     let columns = lines[0].length;
+    let i = -1;
     for (let line of lines) {
         if (columns !== line.length) {
             node.style.color = "red";
@@ -294,7 +299,7 @@ testb.addEventListener("click", () => {
                     odleglosc += prz * prz;
                 });
                 odleglosc = Math.sqrt(odleglosc);
-                neighborText.textContent = neigh[0] + "*" + "Odległość: " + odleglosc.toPrecision(4).toString();
+                neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
             }else{
                 for(let i = 0; i<neigh.length; i++){
                     przesuniecie.push(Number.parseFloat(po[i]) - Number.parseFloat(neigh[0][i]));
@@ -303,7 +308,7 @@ testb.addEventListener("click", () => {
                     odleglosc += prz * prz;
                 });
                 odleglosc = Math.sqrt(odleglosc);
-                neighborText.textContent = neigh[0] + "Odległość: " + odleglosc.toPrecision(4).toString();
+                neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
             }
             neighborsText.appendChild(neighborText);
         });

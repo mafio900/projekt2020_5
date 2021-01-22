@@ -75,24 +75,24 @@ app.on('ready', function(){
         addWindow.on('close', function () {
             addWindow = null;
         });
-        //addWindow.setMenu(null);
+        addWindow.setMenu(null);
     });
 });
 
 //Create menu template
 const mainMenuTemplate = [
     {
-        label: 'File',
+        label: 'Plik',
         submenu:[
             {
-                label: 'Load data from file',
+                label: 'Załaduj plik z danymi',
                 accelerator: process.platform === 'darwin' ? 'Command+Z' : 'Ctrl+Z',
                 click(){
                     loadFile();
                 }
             },
             {
-                label: 'Quit',
+                label: 'Wyjście',
                 accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
                 click(){
                     app.quit();

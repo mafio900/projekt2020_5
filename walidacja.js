@@ -77,6 +77,8 @@ function knn10(arr) {
         const h = document.createElement('h3');
         h.innerHTML = "Tabela nr: " + (m + 1);
         div1.appendChild(h);
+        const testH = document.createElement('h4');
+        div1.appendChild(testH);
         const table = document.createElement('table');
         table.className = "table";
         let classificationPercent = 0;
@@ -115,7 +117,7 @@ function knn10(arr) {
                             odleglosc += prz * prz;
                         });
                         odleglosc = Math.sqrt(odleglosc);
-                        neighborText.textContent = neigh[0] + "*" + "Odległość: " + odleglosc.toPrecision(4).toString();
+                        neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
                     } else {
                         for(let iii = 0; iii<neigh.length; iii++){
                             przesuniecie.push(Number.parseFloat(arr[m][i][j]) - Number.parseFloat(neigh[0][iii]));
@@ -124,7 +126,7 @@ function knn10(arr) {
                             odleglosc += prz * prz;
                         });
                         odleglosc = Math.sqrt(odleglosc);
-                        neighborText.textContent = neigh[0] + "Odległość: " + odleglosc.toPrecision(4).toString();
+                        neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
                     }
                     neighborsText.appendChild(neighborText);
                 });
@@ -156,17 +158,11 @@ function knn10(arr) {
                 }
             }
         }
-        const classificationTr = document.createElement('tr');
-        const classificationTd = document.createElement('td');
         s += classificationPercent / sum;
-        classificationTd.textContent = "Dokładność klasyfikacji wynosi: " + ((classificationPercent / sum) * 100).toPrecision(4).toString() + "%";
-        classificationTd.colSpan = 3;
-        classificationTr.appendChild(classificationTd);
-        table.appendChild(classificationTr);
+        testH.innerHTML = "Dokładność klasyfikacji wynosi: " + ((classificationPercent / sum) * 100).toPrecision(4).toString() + "%";
         div1.appendChild(table);
         wal.appendChild(div1);
-    }
-    const els = document.getElementsByClassName("classClickk");
+        const els = document.getElementsByClassName("classClickk");
         Array.from(els).forEach((el) => {
             el.addEventListener("click", () => {
                 const neighbor = document.getElementById(el.id.toString() + "n");
@@ -177,6 +173,7 @@ function knn10(arr) {
                 }
             });
         });
+    }
         hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s / arr.length) * 100).toPrecision(4).toString() + "%";
         
 }

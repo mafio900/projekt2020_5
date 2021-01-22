@@ -101,6 +101,8 @@ function addTestingTable() {
     var h = document.createElement('h3');
     h.innerHTML = "Zestaw testujących";
     div1.appendChild(h);
+    const testH = document.createElement('h4');
+    div1.appendChild(testH);
     var table = document.createElement('table');
     table.className = "table";
     let classificationPercent = 0;
@@ -109,17 +111,50 @@ function addTestingTable() {
         const mv = majority_vote(fn);
 
         //tworzymy wiersze
-        var tr = document.createElement('tr');
+        const tr = document.createElement('tr');
 
-        var td = document.createElement('td');
+        let td = document.createElement('td');
         td.appendChild(document.createTextNode(i + 1));
         tr.appendChild(td);
 
-        var td = document.createElement('td');
-        td.appendChild(document.createTextNode(po));
+        td = document.createElement('td');
+        const divPoint = document.createElement('div');
+        divPoint.appendChild(document.createTextNode(po));
+        divPoint.id = i.toString();
+        divPoint.className = "classClickkkk";
+        const neighborsText = document.createElement('p');
+        neighborsText.id = i.toString() + "n";
+        neighborsText.className = "hideText";
+        fn.forEach(neigh => {
+            const neighborText = document.createElement("p");
+            let przesuniecie = [];
+            let odleglosc = 0;
+            if(neigh[1] == mv){
+                for(let ii = 0; ii<neigh.length; ii++){
+                    przesuniecie.push(Number.parseFloat(po[ii]) - Number.parseFloat(neigh[0][ii]));
+                }
+                przesuniecie.forEach(prz => {
+                    odleglosc += prz * prz;
+                });
+                odleglosc = Math.sqrt(odleglosc);
+                neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
+            }else{
+                for(let ii = 0; ii<neigh.length; ii++){
+                    przesuniecie.push(Number.parseFloat(po[ii]) - Number.parseFloat(neigh[0][ii]));
+                }
+                przesuniecie.forEach(prz => {
+                    odleglosc += prz * prz;
+                });
+                odleglosc = Math.sqrt(odleglosc);
+                neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
+            }
+            neighborsText.appendChild(neighborText);
+        });
+        divPoint.appendChild(neighborsText);
+        td.appendChild(divPoint);
         tr.appendChild(td);
 
-        var td = document.createElement('td');
+        td = document.createElement('td');
         td.appendChild(document.createTextNode(names[mv]));
         tr.appendChild(td);
 
@@ -143,15 +178,20 @@ function addTestingTable() {
         }
 
     }
-    //console.log(classificationPercent/testujacy.length);
-    const classificationTr = document.createElement('tr');
-    const classificationTd = document.createElement('td');
-    classificationTd.textContent = "Dokładność klasyfikacji wynosi: " + ((classificationPercent/testujacy.length)*100).toPrecision(4).toString() + "%";
-    classificationTd.colSpan = 3;
-    classificationTr.appendChild(classificationTd);
-    table.appendChild(classificationTr);
+    testH.innerHTML = "Dokładność klasyfikacji wynosi: " + ((classificationPercent/testujacy.length)*100).toPrecision(4).toString() + "%";
     div1.appendChild(table);
     dataText.appendChild(div1);
+    const els = document.getElementsByClassName("classClickkkk");
+    Array.from(els).forEach((el) => {
+        el.addEventListener("click", ()=>{
+            const neighbor = document.getElementById(el.id.toString() + "n");
+            if(neighbor.className === "hideText"){
+                neighbor.className = "";
+            }else{
+                neighbor.className = "hideText";
+            }
+        });
+    });
 }
 
 //wyświetla tebelę ze zbiorem uczącym się
@@ -159,8 +199,10 @@ function addLearnTable() {
     const div2 = document.createElement('div');
     div2.className = "section-table-1";
     const h = document.createElement('h3');
-    h.innerHTML = "Zestaw uczących się";
+    h.innerHTML = "Zestaw uczących";
     div2.appendChild(h);
+    const learnH = document.createElement('h4');
+    div2.appendChild(learnH);
     const table2 = document.createElement('table');
     table2.className = "table";
     let classificationPercent = 0;
@@ -177,7 +219,40 @@ function addLearnTable() {
             tr.appendChild(td);
 
             td = document.createElement('td');
-            td.appendChild(document.createTextNode(uczacy[i][j]));
+            const divPoint = document.createElement('div');
+            divPoint.appendChild(document.createTextNode(uczacy[i][j]));
+            divPoint.id = iksde.toString() + i + "u";
+            divPoint.className = "classClickkk";
+            const neighborsText = document.createElement('p');
+            neighborsText.id = iksde.toString() + i + "u" + "n";
+            neighborsText.className = "hideText";
+            fn.forEach(neigh => {
+                const neighborText = document.createElement("p");
+                let przesuniecie = [];
+                let odleglosc = 0;
+                if(neigh[1] == mv){
+                    for(let iii = 0; iii<neigh.length; iii++){
+                        przesuniecie.push(Number.parseFloat(uczacy[i][j][iii]) - Number.parseFloat(neigh[0][iii]));
+                    }
+                    przesuniecie.forEach(prz => {
+                        odleglosc += prz * prz;
+                    });
+                    odleglosc = Math.sqrt(odleglosc);
+                    neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
+                }else{
+                    for(let iii = 0; iii<neigh.length; iii++){
+                        przesuniecie.push(Number.parseFloat(uczacy[i][j][iii]) - Number.parseFloat(neigh[0][iii]));
+                    }
+                    przesuniecie.forEach(prz => {
+                        odleglosc += prz * prz;
+                    });
+                    odleglosc = Math.sqrt(odleglosc);
+                    neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
+                }
+                neighborsText.appendChild(neighborText);
+            });
+            divPoint.appendChild(neighborsText);
+            td.appendChild(divPoint);
             tr.appendChild(td);
 
             td = document.createElement('td');
@@ -202,18 +277,24 @@ function addLearnTable() {
             }
         }
     }
-    const classificationTr = document.createElement('tr');
-    const classificationTd = document.createElement('td');
     let sum = 0;
     for(let [iks, lol] of uczacy.entries() ){
         sum += lol.length;
     }
-    classificationTd.textContent = "Dokładność klasyfikacji wynosi: " + ((classificationPercent/sum)*100).toPrecision(4).toString() + "%";
-    classificationTd.colSpan = 3;
-    classificationTr.appendChild(classificationTd);
-    table2.appendChild(classificationTr);
+    learnH.innerHTML = "Dokładność klasyfikacji wynosi: " + ((classificationPercent/sum)*100).toPrecision(4).toString() + "%";
     div2.appendChild(table2);
     dataText.textContent = "";
     dataText.appendChild(div2);
+    const els = document.getElementsByClassName("classClickkk");
+        Array.from(els).forEach((el) => {
+            el.addEventListener("click", ()=>{
+                const neighbor = document.getElementById(el.id.toString() + "n");
+                if(neighbor.className === "hideText"){
+                    neighbor.className = "";
+                }else{
+                    neighbor.className = "hideText";
+                }
+            });
+        });
 }
 
