@@ -109,25 +109,14 @@ function knn10(arr) {
                     const neighborText = document.createElement("p");
                     let przesuniecie = [];
                     let odleglosc = 0;
-                    if (neigh[1] == mv) {
-                        for(let iii = 0; iii<neigh.length; iii++){
-                            przesuniecie.push(Number.parseFloat(arr[m][i][j]) - Number.parseFloat(neigh[0][iii]));
-                        }
-                        przesuniecie.forEach(prz => {
-                            odleglosc += prz * prz;
-                        });
-                        odleglosc = Math.sqrt(odleglosc);
-                        neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
-                    } else {
-                        for(let iii = 0; iii<neigh.length; iii++){
-                            przesuniecie.push(Number.parseFloat(arr[m][i][j]) - Number.parseFloat(neigh[0][iii]));
-                        }
-                        przesuniecie.forEach(prz => {
-                            odleglosc += prz * prz;
-                        });
-                        odleglosc = Math.sqrt(odleglosc);
-                        neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
+                    for(let iii = 0; iii<neigh.length; iii++){
+                        przesuniecie.push(Number.parseFloat(arr[m][i][j]) - Number.parseFloat(neigh[0][iii]));
                     }
+                    przesuniecie.forEach(prz => {
+                        odleglosc += prz * prz;
+                    });
+                    odleglosc = Math.sqrt(odleglosc);
+                    neighborText.textContent = neigh[0] + " " + names[neigh[1]] + " Odległość: " + odleglosc.toPrecision(4).toString();
                     neighborsText.appendChild(neighborText);
                 });
                 divPoint.appendChild(neighborsText);
@@ -162,19 +151,21 @@ function knn10(arr) {
         testH.innerHTML = "Dokładność klasyfikacji wynosi: " + ((classificationPercent / sum) * 100).toPrecision(4).toString() + "%";
         div1.appendChild(table);
         wal.appendChild(div1);
-        const els = document.getElementsByClassName("classClickk");
+    }
+    const els = document.getElementsByClassName("classClickk");
         Array.from(els).forEach((el) => {
             el.addEventListener("click", () => {
                 const neighbor = document.getElementById(el.id.toString() + "n");
                 if (neighbor.className === "hideText") {
+                    console.log("u " + el.id.toString() + "n");
                     neighbor.className = "";
                 } else {
+                    console.log("h " + el.id.toString() + "n");
                     neighbor.className = "hideText";
                 }
             });
         });
-    }
-        hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s / arr.length) * 100).toPrecision(4).toString() + "%";
+    hh.innerHTML = "Dokładność klasyfikacji ogólnej wynosi: " + ((s / arr.length) * 100).toPrecision(4).toString() + "%";
         
 }
 
